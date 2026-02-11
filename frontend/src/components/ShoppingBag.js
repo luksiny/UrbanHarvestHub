@@ -4,7 +4,7 @@ import { useCart } from '../context/CartContext';
 import './ShoppingBag.css';
 
 const ShoppingBag = ({ isOpen, onClose }) => {
-  const { items, total, removeItem, updateQuantity, count } = useCart();
+  const { items, total, removeItem, updateQuantity } = useCart();
 
   if (!isOpen) return null;
 
