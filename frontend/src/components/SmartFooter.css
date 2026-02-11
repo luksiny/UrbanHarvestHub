@@ -1,0 +1,285 @@
+/* Smart Footer – deep glassmorphism, three-column / 2x2, Apple-style refinement */
+
+/* Deep glassmorphism with sage-green tint and high blur */
+.smart-footer {
+  background: linear-gradient(
+    180deg,
+    rgba(135, 169, 107, 0.1) 0%,
+    rgba(135, 169, 107, 0.06) 50%,
+    rgba(249, 249, 249, 0.5) 100%
+  );
+  box-shadow: inset 0 0 0 1px rgba(135, 169, 107, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  margin-top: auto;
+  padding: 12px 0 10px;
+}
+
+[data-theme="dark"] .smart-footer {
+  background: linear-gradient(
+    180deg,
+    rgba(135, 169, 107, 0.08) 0%,
+    rgba(15, 15, 15, 0.85) 100%
+  );
+  box-shadow: inset 0 0 0 1px rgba(135, 169, 107, 0.08);
+  border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+@media (max-width: 768px) {
+  .smart-footer {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom, 0));
+  }
+}
+
+.smart-footer__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 16px;
+}
+
+/* Desktop: three columns */
+@media (min-width: 769px) {
+  .smart-footer__inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    justify-items: center;
+    gap: 16px 24px;
+  }
+
+  .smart-footer__col--status {
+    justify-self: start;
+  }
+
+  .smart-footer__col--links {
+    justify-self: center;
+  }
+
+  .smart-footer__col--install {
+    justify-self: end;
+  }
+
+  .smart-footer__tagline {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Mobile: tight 2x2 grid */
+@media (max-width: 768px) {
+  .smart-footer__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 10px 12px;
+    justify-items: stretch;
+  }
+
+  .smart-footer__col--status {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .smart-footer__col--install {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+  }
+
+  .smart-footer__col--links {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .smart-footer__tagline {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+}
+
+/* ---- Col 1: Status pill (smaller, left-aligned) ---- */
+.smart-footer__status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(135, 169, 107, 0.15);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid rgba(135, 169, 107, 0.25);
+}
+
+.smart-footer__status-pill--offline {
+  background: rgba(107, 114, 128, 0.2);
+  border-color: rgba(107, 114, 128, 0.3);
+  color: var(--text-muted);
+}
+
+[data-theme="dark"] .smart-footer__status-pill {
+  background: rgba(135, 169, 107, 0.12);
+  border-color: rgba(135, 169, 107, 0.2);
+  color: var(--text);
+}
+
+[data-theme="dark"] .smart-footer__status-pill--offline {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Breathing green glow on sync icon (online only) */
+.smart-footer__status-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--primary);
+}
+
+.smart-footer__status-pill:not(.smart-footer__status-pill--offline) .smart-footer__status-icon {
+  animation: smart-footer-breathe 2.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 6px rgba(135, 169, 107, 0.5));
+}
+
+[data-theme="dark"] .smart-footer__status-pill:not(.smart-footer__status-pill--offline) .smart-footer__status-icon {
+  filter: drop-shadow(0 0 8px rgba(155, 184, 126, 0.4));
+}
+
+@keyframes smart-footer-breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.75; }
+}
+
+/* ---- Col 2: Single row – links + social (minimalist line icons) ---- */
+.smart-footer__row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+}
+
+.smart-footer__row-divider {
+  width: 1px;
+  height: 14px;
+  background: var(--border);
+  margin: 0 4px;
+}
+
+.smart-footer__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  min-height: 36px;
+  padding: 6px;
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.smart-footer__link:hover {
+  color: var(--primary);
+  background: rgba(135, 169, 107, 0.1);
+}
+
+[data-theme="dark"] .smart-footer__link:hover {
+  color: var(--primary-soft);
+  background: rgba(155, 184, 126, 0.1);
+}
+
+.smart-footer__link svg {
+  display: block;
+}
+
+/* Admin Portal / Go to Dashboard – subtle text link */
+.smart-footer__admin-link {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 4px 8px;
+  border-radius: var(--radius);
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.smart-footer__admin-link:hover {
+  color: var(--primary);
+  background: rgba(135, 169, 107, 0.1);
+}
+
+[data-theme="dark"] .smart-footer__admin-link:hover {
+  color: var(--primary-soft);
+  background: rgba(155, 184, 126, 0.1);
+}
+
+/* ---- Col 3: Install – outline button + icon (only when beforeinstallprompt) ---- */
+.smart-footer__install-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 8px 16px;
+  border: 1.5px solid var(--primary);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--primary);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.smart-footer__install-btn:hover {
+  background: rgba(135, 169, 107, 0.12);
+  color: var(--soil);
+  border-color: var(--soil);
+}
+
+.smart-footer__install-btn:disabled {
+  cursor: wait;
+  opacity: 0.8;
+}
+
+.smart-footer__install-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+[data-theme="dark"] .smart-footer__install-btn {
+  border-color: var(--primary-soft);
+  color: var(--primary-soft);
+}
+
+[data-theme="dark"] .smart-footer__install-btn:hover {
+  background: rgba(155, 184, 126, 0.15);
+  color: var(--primary-soft);
+  border-color: var(--primary-soft);
+}
+
+/* ---- Tagline: smaller, high-end ---- */
+.smart-footer__tagline {
+  margin: 0;
+  padding-top: 4px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  opacity: 0.85;
+}
+
+[data-theme="dark"] .smart-footer__tagline {
+  opacity: 0.7;
+}

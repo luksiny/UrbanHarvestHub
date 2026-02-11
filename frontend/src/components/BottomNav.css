@@ -1,0 +1,54 @@
+/* Mobile-first bottom navigation – glassmorphism */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
+  background: var(--glass-bg);
+  border-top: 1px solid var(--glass-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 1000;
+  box-shadow: 0 -4px 24px rgba(75, 54, 33, 0.06);
+}
+
+[data-theme="dark"] .bottom-nav {
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.3);
+}
+
+.bottom-nav__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: 500;
+  border-radius: var(--radius);
+  transition: color var(--transition-fast), background var(--transition-fast);
+  min-width: 56px;
+}
+
+.bottom-nav__item svg {
+  font-size: 1.25rem;
+}
+
+.bottom-nav__item:hover {
+  color: var(--text);
+}
+
+.bottom-nav__item.active {
+  color: var(--primary);
+}
+
+@media (min-width: 769px) {
+  .bottom-nav {
+    display: none;
+  }
+}

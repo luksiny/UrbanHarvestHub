@@ -1,0 +1,514 @@
+/* Urban Harvest – premium organic-tech aesthetic */
+/* Palette: Forest Green (primary), Sage (secondary), Terracotta (accent) */
+.home {
+  --uh-primary: #2D5A27;
+  --uh-secondary: #8BA888;
+  --uh-accent: #BC6C25;
+  --uh-accent-hover: #d47a2d;
+  --uh-font-heading: 'Playfair Display', Georgia, serif;
+  --uh-font-body: 'Montserrat', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  padding: 0 0 64px;
+  font-family: var(--uh-font-body);
+}
+
+/* ----- Hero: background image + overlay ----- */
+.hero {
+  position: relative;
+  background-color: var(--uh-primary);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+  padding: 64px 0 56px;
+  margin-bottom: 32px;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(45, 90, 39, 0.75) 0%,
+    rgba(45, 90, 39, 0.5) 50%,
+    rgba(45, 90, 39, 0.85) 100%
+  );
+  pointer-events: none;
+}
+
+.hero .container {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.hero h1 {
+  font-family: var(--uh-font-heading);
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  color: #fff;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.25);
+}
+
+.hero p {
+  font-family: var(--uh-font-body);
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 28px;
+  line-height: 1.7;
+}
+
+/* ----- Glassmorphism: search + category pills ----- */
+.search-pill-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.search-pill-bar .search-pill-input.glass,
+.search-pill-bar .filter-pill.glass {
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #fff;
+}
+
+.search-pill-bar .search-pill-input.glass::placeholder {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.search-pill-bar .search-pill-input.glass:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.15);
+}
+
+.search-pill-bar .search-pill-input {
+  flex: 1 1 280px;
+  max-width: 360px;
+  padding: 14px 22px;
+  border-radius: 999px;
+  font-family: var(--uh-font-body);
+  font-size: 15px;
+  transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.filter-pill {
+  font-family: var(--uh-font-body);
+  border-radius: 999px;
+  padding: 10px 20px;
+  border: 1px solid transparent;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.filter-pill.glass:hover {
+  background: rgba(255, 255, 255, 0.28);
+  border-color: rgba(255, 255, 255, 0.45);
+  color: #fff;
+}
+
+.filter-pill.glass.active {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(255, 255, 255, 0.95);
+  color: var(--uh-primary);
+}
+
+/* ----- About section: breathing whitespace ----- */
+.about-section {
+  padding: 64px 0;
+  margin-bottom: 24px;
+}
+
+.about-content {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.about-text h2 {
+  font-family: var(--uh-font-heading);
+  font-size: clamp(1.6rem, 3.5vw, 2.1rem);
+  font-weight: 600;
+  color: var(--uh-primary);
+  margin-bottom: 20px;
+  line-height: 1.3;
+}
+
+.about-text > p {
+  font-size: 1rem;
+  color: var(--text-muted);
+  line-height: 1.8;
+  margin-bottom: 40px;
+}
+
+.about-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+}
+
+.feature-item {
+  background: #ffffff;
+  padding: 28px 22px;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(45, 90, 39, 0.2);
+  box-shadow: 0 4px 20px rgba(45, 90, 39, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
+  text-align: center;
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+
+.feature-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(45, 90, 39, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: rgba(45, 90, 39, 0.35);
+}
+
+/* Dark mode: feature boxes must stay clearly visible */
+[data-theme="dark"] .home .feature-item {
+  background: var(--bg-elevated);
+  border: 1px solid rgba(139, 168, 136, 0.35);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="dark"] .home .feature-item:hover {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(139, 168, 136, 0.4);
+  border-color: rgba(139, 168, 136, 0.5);
+}
+
+.feature-item h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--uh-primary);
+  margin-bottom: 10px;
+}
+
+.feature-item p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.about-cta {
+  margin-top: 36px;
+}
+
+.about-cta .btn {
+  border-radius: 999px;
+}
+
+/* Get Started = Earthy Terracotta accent */
+.home .btn-accent,
+.home .btn-primary.btn-accent {
+  background: var(--uh-accent);
+  border-color: var(--uh-accent);
+  color: #fff;
+}
+
+.home .btn-accent:hover,
+.home .btn-primary.btn-accent:hover {
+  background: var(--uh-accent-hover);
+  border-color: var(--uh-accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(188, 108, 37, 0.35);
+}
+
+/* ----- Sections: spacing + fade-in-up ----- */
+.home-section {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.home-section.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.section {
+  margin-bottom: 56px;
+  padding-top: 48px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.section-header h2 {
+  font-family: var(--uh-font-heading);
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  font-weight: 600;
+  color: var(--uh-primary);
+}
+
+.section-header .btn {
+  font-size: 13px;
+  padding: 10px 20px;
+  border-radius: 999px;
+}
+
+/* ----- Bento grid ----- */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
+  align-items: stretch;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.bento-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--glass-shadow);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.35s ease;
+}
+
+.bento-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border);
+}
+
+.bento-card-1 { grid-column: span 2; grid-row: span 1; }
+.bento-card-2 { grid-column: span 2; grid-row: span 1; }
+.bento-card-3 { grid-column: span 2; grid-row: span 1; }
+.bento-card-4 { grid-column: span 2; grid-row: span 1; }
+.bento-card-5 { grid-column: span 2; grid-row: span 1; }
+.bento-card-6 { grid-column: span 2; grid-row: span 1; }
+
+/* ----- Featured Workshop cards: 20px radius, overlay, hover scale ----- */
+.workshop-cards .workshop-card {
+  border-radius: 20px;
+}
+
+.workshop-cards .workshop-card:hover {
+  transform: scale(1.05) translateY(-4px);
+  box-shadow: 0 20px 50px rgba(45, 90, 39, 0.2);
+}
+
+.workshop-image-container,
+.event-image-container,
+.product-image-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--border);
+}
+
+.workshop-cards .workshop-image-container {
+  border-radius: 20px 20px 0 0;
+}
+
+.workshop-card-image,
+.event-card-image,
+.product-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.workshop-cards .bento-card:hover .workshop-card-image {
+  transform: scale(1.08);
+}
+
+/* Content overlay: semi-transparent dark gradient at bottom */
+.workshop-card-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 24px 20px 20px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.3) 30%,
+    rgba(0, 0, 0, 0.75) 100%
+  );
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.workshop-card-title {
+  font-family: var(--uh-font-heading);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
+  line-height: 1.3;
+}
+
+.workshop-price-pill {
+  display: inline-block;
+  background: var(--uh-accent);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 999px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+}
+
+.workshop-card-desc {
+  padding: 14px 18px 0 !important;
+}
+
+.workshop-cards .card-footer {
+  padding: 12px 18px;
+}
+
+/* Other bento cards (products, events): image only, no overlay */
+.bento-card h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  padding: 14px 16px 0;
+  color: var(--text);
+  font-family: var(--uh-font-body);
+}
+
+.home .text-light {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  padding: 0 16px;
+  flex-grow: 1;
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.home .card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+}
+
+.home .badge {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: var(--uh-secondary);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+/* Dark mode: badge must stay clearly visible (sage was too light on dark bg) */
+[data-theme="dark"] .home .badge {
+  background: #5a8c56;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.home .price,
+.home .date {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--uh-primary);
+}
+
+.home-section-loading {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  min-height: 80px;
+}
+
+.no-results {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.no-results p {
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .bento-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .bento-card-1, .bento-card-2, .bento-card-3,
+  .bento-card-4, .bento-card-5, .bento-card-6 {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .bento-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .hero {
+    min-height: 360px;
+    padding: 48px 0 44px;
+  }
+  .hero h1 {
+    font-size: clamp(1.75rem, 6vw, 2.25rem);
+  }
+  .search-pill-bar .search-pill-input {
+    max-width: 100%;
+  }
+  .section {
+    padding-top: 32px;
+    margin-bottom: 44px;
+  }
+  .about-section {
+    padding: 48px 0;
+  }
+}

@@ -1,0 +1,181 @@
+/* Receipt: header, items table, shipping/payment grid, grand total, Save PDF (PWA) */
+
+.receipt {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 24px 20px 32px;
+  background: var(--bg-elevated);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  box-shadow: var(--glass-shadow);
+}
+
+.receipt__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.receipt__order-number {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+
+.receipt__badge {
+  display: inline-block;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--success);
+  border-radius: 999px;
+}
+
+.receipt__section {
+  margin-bottom: 24px;
+}
+
+.receipt__section-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.receipt__table-wrap {
+  overflow-x: auto;
+}
+
+.receipt__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.receipt__table th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 10px 12px 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.receipt__th-num {
+  text-align: right;
+}
+
+.receipt__table td {
+  padding: 12px 12px 12px 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+
+.receipt__row:last-child td {
+  border-bottom: none;
+}
+
+.receipt__cell--name {
+  font-weight: 500;
+}
+
+.receipt__cell--num {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.receipt__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.receipt__block {
+  min-width: 0;
+}
+
+.receipt__address,
+.receipt__payment {
+  font-size: 0.9rem;
+  color: var(--text);
+  margin: 0;
+  font-style: normal;
+}
+
+.receipt__line {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.receipt__line:last-child {
+  margin-bottom: 0;
+}
+
+.receipt__payment {
+  margin-top: 4px;
+}
+
+.receipt__grand-total {
+  margin-top: 24px;
+  padding: 20px 24px;
+  background: var(--sage-muted);
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.receipt__grand-total-label {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.receipt__grand-total-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.receipt__actions {
+  margin-top: 28px;
+}
+
+.receipt__btn {
+  width: 100%;
+}
+
+/* PWA: Save as PDF via window.print() – hide actions and confetti when printing */
+@media print {
+  .print-hidden,
+  .receipt__actions,
+  .no-print-actions .receipt__actions,
+  .order-success__confetti,
+  .order-success__actions--below {
+    display: none !important;
+  }
+
+  .receipt {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+
+  .order-success {
+    padding: 16px 0;
+  }
+
+  .order-success__content {
+    max-width: 100%;
+  }
+}

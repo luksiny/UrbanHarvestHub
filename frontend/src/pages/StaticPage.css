@@ -1,0 +1,31 @@
+.static-page {
+  padding: 32px 0 100px;
+}
+
+.static-page .container {
+  max-width: 720px;
+}
+
+.static-page h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+.static-page p {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+.static-page a {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.static-page a:hover {
+  color: var(--primary-soft);
+}

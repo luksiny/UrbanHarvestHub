@@ -1,0 +1,313 @@
+@import './MasterDetail.css';
+
+/* ---- Map at top ---- */
+.events-map-wrap {
+  width: 100%;
+  height: 280px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  margin-bottom: 28px;
+  background: var(--border);
+}
+
+.events-map {
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.events-map .leaflet-container {
+  font-family: var(--font-body);
+}
+
+/* ---- List-to-card hybrid: date badge left of card ---- */
+.events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.event-list-card {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.25s ease, border-color 0.2s ease;
+}
+
+.event-list-card:hover {
+  box-shadow: 0 8px 24px rgba(75, 54, 33, 0.08);
+  border-color: rgba(75, 54, 33, 0.18);
+}
+
+[data-theme="dark"] .event-list-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.event-list-card__date-badge {
+  flex-shrink: 0;
+  width: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 16px 8px;
+  background: var(--primary);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.event-list-card__content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.event-list-card__link {
+  display: flex;
+  flex: 1;
+  text-decoration: none;
+  color: inherit;
+  min-width: 0;
+}
+
+.event-list-card__media {
+  position: relative;
+  flex-shrink: 0;
+  width: 180px;
+  min-height: 120px;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--border);
+}
+
+.event-list-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.event-list-card__link:hover .event-list-card__image {
+  transform: scale(1.05);
+}
+
+.event-list-card__badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  background: var(--glass-bg);
+  color: var(--text);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(8px);
+}
+
+.event-list-card__body {
+  flex: 1;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.event-list-card__title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.event-list-card__meta {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.event-list-card__excerpt {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.event-list-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.event-list-card__location {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  max-width: 60%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.event-list-card__price {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.event-list-card__price--free {
+  color: var(--success);
+}
+
+/* ---- Actions: Save to Offline toggle + Join Event button ---- */
+.event-list-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+[data-theme="dark"] .event-list-card__actions {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.event-list-card__offline-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.event-list-card__offline-toggle input {
+  width: 40px;
+  height: 22px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+.event-list-card__offline-toggle input:disabled {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.event-list-card__offline-label {
+  white-space: nowrap;
+}
+
+/* High-contrast primary "Join Event" button */
+.event-list-card__join-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 24px;
+  border-radius: 999px;
+  background: var(--primary);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  box-shadow: 0 2px 8px rgba(135, 169, 107, 0.4);
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.event-list-card__join-btn:hover {
+  background: var(--soil);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(75, 54, 33, 0.3);
+}
+
+.event-list-card__join-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--sage-muted);
+}
+
+[data-theme="dark"] .event-list-card__join-btn {
+  background: var(--primary);
+  color: var(--bg);
+}
+
+[data-theme="dark"] .event-list-card__join-btn:hover {
+  background: var(--primary-soft);
+  color: var(--bg);
+}
+
+/* Responsive: stack date badge above card on small screens */
+@media (max-width: 768px) {
+  .events-map-wrap {
+    height: 220px;
+    margin-bottom: 20px;
+  }
+
+  .event-list-card {
+    flex-direction: column;
+  }
+
+  .event-list-card__date-badge {
+    width: 100%;
+    flex-direction: row;
+    padding: 10px 16px;
+    font-size: 0.85rem;
+  }
+
+  .event-list-card__link {
+    flex-direction: column;
+  }
+
+  .event-list-card__media {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+  }
+
+  .event-list-card__body {
+    padding: 14px 16px;
+  }
+
+  .event-list-card__actions {
+    flex-wrap: wrap;
+    padding: 10px 16px;
+  }
+
+  .event-list-card__join-btn {
+    width: 100%;
+    padding: 12px 20px;
+  }
+}

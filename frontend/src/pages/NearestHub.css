@@ -1,0 +1,323 @@
+/* Nearest Hub – horizontal scroll / 3-col grid, modern location cards */
+.nearest-hub-page {
+  padding: 2rem 0;
+}
+
+.nearest-hub-page h1 {
+  margin-bottom: 0.5rem;
+  color: var(--text);
+}
+
+.subtitle {
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+.location-section {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: var(--bg-elevated);
+  border-radius: 8px;
+}
+
+.location-btn-large {
+  font-size: 1.2rem;
+  padding: 1rem 2rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.location-btn-large:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.location-info {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: var(--bg);
+  border-radius: 6px;
+  display: inline-block;
+}
+
+.location-info p {
+  margin: 0;
+  color: var(--text);
+}
+
+.nearest-section {
+  margin-bottom: 3rem;
+}
+
+.nearest-section h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--text);
+}
+
+/* Horizontal scroll container + 3-column grid (clean on mobile) */
+.nearest-hub-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 -20px;
+  padding: 0 20px 12px;
+}
+
+.nearest-hub-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.nearest-hub-scroll::-webkit-scrollbar-thumb {
+  background: rgba(45, 90, 39, 0.3);
+  border-radius: 3px;
+}
+
+.nearest-hub-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  min-width: min(100%, 960px);
+}
+
+@media (max-width: 900px) {
+  .nearest-hub-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .nearest-hub-grid {
+    grid-template-columns: 1fr;
+    min-width: 100%;
+  }
+
+  .nearest-hub-scroll {
+    overflow-x: hidden;
+  }
+}
+
+/* Modern location card: glassmorphism, border-left, hover-lift */
+.nearest-hub-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 1.25rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-left: 4px solid #2D5A27;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.nearest-hub-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(45, 90, 39, 0.15);
+}
+
+[data-theme="dark"] .nearest-hub-card {
+  background: rgba(26, 26, 26, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 4px solid #2D5A27;
+}
+
+[data-theme="dark"] .nearest-hub-card:hover {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+}
+
+/* Distance badge: small green pill at top right */
+.nearest-hub-distance-pill {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(45, 90, 39, 0.15);
+  border: 1px solid rgba(45, 90, 39, 0.25);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.nearest-hub-pill-icon {
+  color: #2D5A27;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.nearest-hub-km {
+  color: #8BA888;
+}
+
+[data-theme="dark"] .nearest-hub-distance-pill {
+  background: rgba(45, 90, 39, 0.35);
+  border-color: rgba(139, 168, 136, 0.4);
+}
+
+[data-theme="dark"] .nearest-hub-pill-icon {
+  color: #8BA888;
+}
+
+[data-theme="dark"] .nearest-hub-km {
+  color: #a8c4a5;
+}
+
+/* Typography: bold Forest Green title, muted body */
+.nearest-hub-card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2D5A27;
+  margin: 0 0 0.5rem;
+  padding-right: 100px;
+  line-height: 1.3;
+}
+
+.nearest-hub-card-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0 0 auto;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.nearest-hub-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] .nearest-hub-card-footer {
+  border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+.nearest-hub-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: #8BA888;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.nearest-hub-price,
+.nearest-hub-date {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2D5A27;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nearest-hub-date-icon {
+  font-size: 0.85rem;
+  color: #8BA888;
+  flex-shrink: 0;
+}
+
+/* Empty state: "Searching for nearby harvests..." loading animation */
+.nearest-hub-empty {
+  text-align: center;
+  padding: 3rem 2rem;
+}
+
+.nearest-hub-empty-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 auto 1.25rem;
+}
+
+.nearest-hub-empty-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #2D5A27;
+  animation: nearest-hub-dot 1.2s ease-in-out infinite both;
+}
+
+.nearest-hub-empty-dots span:nth-child(1) { animation-delay: -0.24s; }
+.nearest-hub-empty-dots span:nth-child(2) { animation-delay: -0.12s; }
+.nearest-hub-empty-dots span:nth-child(3) { animation-delay: 0s; }
+
+@keyframes nearest-hub-dot {
+  0%, 80%, 100% {
+    transform: scale(0.75);
+    opacity: 0.6;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.nearest-hub-empty-text {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Legacy / fallback */
+.distance-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.distance {
+  font-size: 1rem;
+}
+
+.instruction-box {
+  text-align: center;
+  padding: 3rem;
+  background: var(--bg-elevated);
+  border-radius: 8px;
+  color: var(--text-muted);
+}
+
+.instruction-box p {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.no-results {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+  .location-section {
+    padding: 1.5rem;
+  }
+
+  .location-btn-large {
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+  }
+}

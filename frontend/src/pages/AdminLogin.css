@@ -1,0 +1,109 @@
+.admin-login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(160deg, var(--sage-muted) 0%, var(--bg) 50%);
+}
+
+.admin-login__card {
+  width: 100%;
+  max-width: 380px;
+  padding: 40px 32px;
+  background: var(--bg-elevated);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  box-shadow: var(--glass-shadow);
+}
+
+.admin-login__title {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.admin-login__subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+.admin-login__form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.admin-login__error {
+  font-size: 0.9rem;
+  color: var(--error);
+  margin: 0;
+  padding: 10px 12px;
+  background: rgba(197, 48, 48, 0.08);
+  border-radius: var(--radius);
+}
+
+.admin-login__label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.admin-login__input {
+  padding: 12px 14px;
+  font-size: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.admin-login__input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--sage-muted);
+}
+
+.admin-login__btn {
+  margin-top: 8px;
+  padding: 14px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--primary);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background var(--transition-fast), opacity var(--transition-fast);
+}
+
+.admin-login__btn:hover:not(:disabled) {
+  background: var(--primary-soft);
+}
+
+.admin-login__btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.admin-login__back {
+  display: block;
+  margin-top: 24px;
+  font-size: 0.9rem;
+  color: var(--primary);
+  text-decoration: none;
+  text-align: center;
+}
+
+.admin-login__back:hover {
+  text-decoration: underline;
+}
