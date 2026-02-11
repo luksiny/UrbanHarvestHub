@@ -38,7 +38,6 @@ const Home = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('all'); // all, seeds, live-workshops, tools, soil
   const homeRef = useRef(null);
-  const sectionRefs = useRef([]); // kept for backwards compatibility with any stale ref callbacks
 
   useEffect(() => {
     const root = homeRef.current;
@@ -65,7 +64,7 @@ const Home = () => {
           productsAPI.getAll({ limit: 6, sort: 'name' }),
           eventsAPI.getAll({ limit: 3 })
         ]);
-        
+
         // Handle response format: { success: true, data: [...], pagination: {...} } or raw array
         const workshopsRaw = workshopsRes?.data ?? workshopsRes;
         const productsRaw = productsRes?.data ?? productsRes;
@@ -261,8 +260,8 @@ const Home = () => {
                       className={`card bento-card workshop-card bento-card-${(index % 4) + 1}`}
                     >
                       <div className="workshop-image-container">
-                        <img 
-                          src={imageUrl} 
+                        <img
+                          src={imageUrl}
                           alt={workshop.title}
                           className="workshop-card-image"
                           width={320}
@@ -321,8 +320,8 @@ const Home = () => {
                       className={`card bento-card bento-card-${(index % 4) + 1}`}
                     >
                       <div className="product-image-container">
-                        <img 
-                          src={imageUrl} 
+                        <img
+                          src={imageUrl}
                           alt={name}
                           className="product-card-image"
                           width={320}
@@ -379,8 +378,8 @@ const Home = () => {
                       className={`card bento-card bento-card-${(index % 4) + 1}`}
                     >
                       <div className="event-image-container">
-                        <img 
-                          src={imageUrl} 
+                        <img
+                          src={imageUrl}
                           alt={title}
                           className="event-card-image"
                           width={320}

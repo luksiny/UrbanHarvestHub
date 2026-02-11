@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { getPendingOrders, removePendingOrder } from '../utils/orderQueue';
 import { ordersAPI } from '../services/api';
 
@@ -9,7 +9,7 @@ import { ordersAPI } from '../services/api';
 export function SyncOrders({ onOrderSynced }) {
   const syncingRef = useRef(false);
 
-  const syncPending = async () => {
+  const syncPending = useCallback(async () => {
     if (syncingRef.current || !navigator.onLine) return;
     syncingRef.current = true;
     try {
@@ -29,18 +29,19 @@ export function SyncOrders({ onOrderSynced }) {
     } finally {
       syncingRef.current = false;
     }
-  };
+  }, [onOrderSynced]);
 
   useEffect(() => {
-    if (!navigator.onLine) return;
-    syncPending();
-  }, []);
+    if (navigator.onLine) {
+      syncPending();
+    }
+  }, [syncPending]);
 
   useEffect(() => {
     const handleOnline = () => syncPending();
     window.addEventListener('online', handleOnline);
     return () => window.removeEventListener('online', handleOnline);
-  }, []);
+  }, [syncPending]);
 
   return null;
 }
