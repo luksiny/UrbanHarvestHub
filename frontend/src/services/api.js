@@ -3,6 +3,7 @@ import axios from 'axios';
 // In development (port 3000), use relative /api so the CRA proxy forwards to the backend (5000)
 const getApiBaseUrl = () => {
   if (process.env.REACT_APP_API_URL) return process.env.REACT_APP_API_URL;
+  if (process.env.NODE_ENV === 'production') return 'https://urban-harvest-hub.onrender.com/api'; // Primary fallback for production
   if (typeof window !== 'undefined' && window.location.port === '3000') return '/api';
   return 'http://localhost:5000/api';
 };
