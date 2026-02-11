@@ -52,6 +52,7 @@ if (sequelize && syncDatabase) {
     app.use('/api/bookings', require('./routes/bookings'));
     app.use('/api/orders', require('./routes/orders'));
     app.use('/api/admin', require('./routes/admin'));
+    app.use('/api/seed', require('./routes/seed'));
   } catch (routeErr) {
     console.error('❌ Failed to load routes:', routeErr.message);
     app.use('/api', (req, res, next) => {
@@ -79,7 +80,7 @@ if (sequelize && syncDatabase) {
 // Serve static files from React app in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../frontend/build')));
-  
+
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
   });
