@@ -6,7 +6,7 @@ const { Op } = require('sequelize');
 
 const validateBooking = [
   body('workshopId').notEmpty().withMessage('Workshop ID is required'),
-  body('userId').trim().notEmpty().withMessage('User ID is required'),
+  body('userId').optional({ nullable: true }).isInt().withMessage('User ID must be an integer'),
   body('userName').trim().notEmpty().withMessage('User name is required'),
   body('userEmail').isEmail().withMessage('Valid email is required').normalizeEmail(),
   body('userPhone').optional().trim(),
@@ -101,10 +101,11 @@ router.post('/', validateBooking, async (req, res, next) => {
     }
     const booking = await Booking.create({
       workshopId: req.body.workshopId,
-      userId: req.body.userId,
+      userId: req.body.userId || null,
       userName: req.body.userName,
       userEmail: req.body.userEmail,
       userPhone: req.body.userPhone || null,
+      notes: req.body.notes || null,
     });
     const withWorkshop = await Booking.findByPk(booking.id, {
       include: [{ model: Workshop, as: 'Workshop', attributes: ['id', 'title', 'date', 'location'] }],

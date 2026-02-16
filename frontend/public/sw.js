@@ -1,25 +1,23 @@
-const CACHE_NAME = 'urban-harvest-hub-v3';
+const CACHE_NAME = 'urban-harvest-hub-v17'; // Version 16 forces the browser to update
 const PRECACHE_URLS = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/favicon.ico',
-  '/logo192.png',
-  '/logo512.png'
+  '/images/icons/favicon.jpg' // Update this to .jpg
 ];
 
-// Install: precache app shell so start_url returns 200 when offline (Lighthouse PWA)
+// Install: precache app shell so start_url returns 200 when offline
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(PRECACHE_URLS).catch(() => {});
+      return cache.addAll(PRECACHE_URLS).catch((err) => {
+        console.log("Precaching failed, check file paths:", err);
+      });
     })
   );
-  // Do not skipWaiting here – wait for user to click "Refresh" so we can show update notification
 });
 
-// When the page asks to activate the new worker (user clicked "Refresh")
-// or to cache specific URLs for offline (e.g. event detail page)
+// Message handler for UI updates or manual caching
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
@@ -34,7 +32,7 @@ self.addEventListener('message', (event) => {
               .then((res) => {
                 if (res && res.status === 200) return cache.put(url, res);
               })
-              .catch(() => {})
+              .catch(() => { })
           )
         );
       }).then(() => {
@@ -44,13 +42,14 @@ self.addEventListener('message', (event) => {
   }
 });
 
-// Activate: clean old caches
+// Activate: This is the part that actually DELETES the green box cache
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
+            console.log("Deleting old cache:", cacheName);
             return caches.delete(cacheName);
           }
         })
@@ -60,7 +59,7 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch: Stale-while-revalidate for same-origin GET; serve 200 for start_url when offline (PWA)
+// Fetch: Stale-while-revalidate strategy
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   const url = new URL(event.request.url);
@@ -77,7 +76,6 @@ self.addEventListener('fetch', (event) => {
             return networkResponse;
           })
           .catch(() => {
-            // Navigation (start_url): serve precached / or /index.html for 200 offline
             if (event.request.mode === 'navigate') {
               return cache.match('/').then((r) => r || cache.match('/index.html'));
             }

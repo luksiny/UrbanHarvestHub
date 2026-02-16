@@ -15,9 +15,10 @@ const Booking = sequelize.define('Booking', {
     field: 'workshop_id',
   },
   userId: {
-    type: DataTypes.STRING(255),
-    allowNull: false,
+    type: DataTypes.INTEGER,
+    allowNull: true,
     field: 'user_id',
+    references: { model: 'users', key: 'id' },
   },
   userName: {
     type: DataTypes.STRING(255),

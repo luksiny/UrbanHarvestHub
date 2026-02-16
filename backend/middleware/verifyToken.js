@@ -15,7 +15,8 @@ function verifyToken(req, res, next) {
   const token = authHeader.slice(7);
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    req.adminId = decoded.adminId ?? decoded.id;
+    req.user = decoded; // Store the whole payload (has userId or adminId)
+    req.adminId = decoded.adminId; // Keep for backward compatibility
     next();
   } catch (err) {
     if (err.name === 'TokenExpiredError') {

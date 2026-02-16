@@ -37,7 +37,10 @@ if (sequelize && syncDatabase) {
   sequelize.authenticate()
     .then(() => {
       console.log('✅ MySQL Connected');
-      return syncDatabase({ alter: true });
+      // Changed alter: true to alter: false to prevent Sequelize from creating redundant indexes
+      // which causes the "Too many keys" error (MySQL limit: 64).
+      // If you change your model fields, set this to true temporarily then back to false.
+      return syncDatabase({ alter: false });
     })
     .then(() => console.log('✅ Database tables synced'))
     .catch(err => {
@@ -52,6 +55,9 @@ if (sequelize && syncDatabase) {
     app.use('/api/bookings', require('./routes/bookings'));
     app.use('/api/orders', require('./routes/orders'));
     app.use('/api/admin', require('./routes/admin'));
+    app.use('/api/users', require('./routes/users'));
+    app.use('/api/reviews', require('./routes/reviews'));
+    app.use('/api/subscriptions', require('./routes/subscriptions'));
     app.use('/api/seed', require('./routes/seed'));
   } catch (routeErr) {
     console.error('❌ Failed to load routes:', routeErr.message);

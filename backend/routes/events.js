@@ -3,6 +3,7 @@ const router = express.Router();
 const { body, validationResult, query } = require('express-validator');
 const { Event } = require('../models');
 const { buildSearchWhere, eventBody } = require('../utils/apiHelper');
+const { verifyToken } = require('../middleware/verifyToken');
 
 const validateEvent = [
   body('title').trim().notEmpty().withMessage('Title is required').isLength({ max: 200 }),
@@ -63,7 +64,7 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', validateEvent, async (req, res, next) => {
+router.post('/', verifyToken, validateEvent, async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -87,7 +88,7 @@ router.post('/', validateEvent, async (req, res, next) => {
   }
 });
 
-router.put('/:id', validateEvent, async (req, res, next) => {
+router.put('/:id', verifyToken, validateEvent, async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -115,7 +116,7 @@ router.put('/:id', validateEvent, async (req, res, next) => {
   }
 });
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', verifyToken, async (req, res, next) => {
   try {
     const event = await Event.findByPk(req.params.id);
     if (!event) {

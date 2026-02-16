@@ -4,6 +4,7 @@ import { productsAPI } from '../services/api';
 import { getProductImage, resolveProductImagePath } from '../utils/productImages';
 import { IconPrice, IconUsers, IconInstructor } from '../components/DetailMetaIcons';
 import { useCart } from '../context/CartContext';
+import ReviewSection from '../components/ReviewSection';
 import './Detail.css';
 
 const ProductDetail = () => {
@@ -155,6 +156,7 @@ const ProductDetail = () => {
             </div>
           </div>
         </div>
+        <ReviewSection targetType="Product" targetId={product.id} />
       </div>
     </div>
   );

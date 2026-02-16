@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { workshopsAPI, bookingsAPI } from '../services/api';
 import { IconInstructor, IconCalendar, IconLocation, IconClock, IconUsers, IconPrice } from '../components/DetailMetaIcons';
+import { useAuth } from '../context/AuthContext';
+import ReviewSection from '../components/ReviewSection';
 import './Detail.css';
 
 const WorkshopDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [workshop, setWorkshop] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,6 +21,16 @@ const WorkshopDetail = () => {
   });
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setBooking(prev => ({
+        ...prev,
+        userName: user.name,
+        userEmail: user.email
+      }));
+    }
+  }, [user]);
 
   useEffect(() => {
     const fetchWorkshop = async () => {
@@ -53,12 +66,12 @@ const WorkshopDetail = () => {
       await bookingsAPI.create({
         ...booking,
         workshopId: id,
-        userId: booking.userEmail // Using email as user ID for simplicity
+        userId: user ? user.id : null
       });
       setSuccess(true);
       setBooking({
-        userName: '',
-        userEmail: '',
+        userName: user ? user.name : '',
+        userEmail: user ? user.email : '',
         userPhone: '',
         notes: ''
       });
@@ -109,7 +122,7 @@ const WorkshopDetail = () => {
       'Preserving Your Harvest': '/images/workshops/preservingharvest.webp',
       'Sustainable Composting': '/images/workshops/composting.jpg'
     };
-    
+
     // Return mapped image or fallback
     return imageMap[workshopTitle] || '/images/workshops/workshop1.jpg';
   };
@@ -136,7 +149,7 @@ const WorkshopDetail = () => {
                 <span className="badge">{workshop.category}</span>
               </div>
             </div>
-            
+
             <div className="detail-section">
               <h2>Description</h2>
               <p>{workshop.description}</p>
@@ -185,7 +198,7 @@ const WorkshopDetail = () => {
               </div>
               {success && <div className="success">Booking successful! Redirecting...</div>}
               {error && <div className="error">{error}</div>}
-              
+
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label>Name *</label>
@@ -240,6 +253,7 @@ const WorkshopDetail = () => {
             </div>
           </div>
         </div>
+        <ReviewSection targetType="Workshop" targetId={id} />
       </div>
     </div>
   );

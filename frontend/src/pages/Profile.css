@@ -1,0 +1,343 @@
+.profile-page {
+    padding: 60px 0;
+    min-height: 90vh;
+    background-color: #f8fafc;
+}
+
+.profile-page>.container {
+    max-width: 1100px;
+}
+
+.profile-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+/* Sidebar Styling */
+.profile-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sidebar-header {
+    padding: 40px 30px;
+    text-align: center;
+    background: white;
+    border-radius: var(--radius-xl);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.avatar-wrapper {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.avatar-gradient {
+    width: 90px;
+    height: 90px;
+    background: linear-gradient(135deg, var(--uh-primary), #4ade80);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 800;
+    box-shadow: 0 10px 15px -3px rgba(45, 90, 39, 0.3);
+    text-transform: uppercase;
+}
+
+.sidebar-header h3 {
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+    color: var(--text);
+    font-weight: 700;
+}
+
+.user-email {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.profile-nav {
+    padding: 15px;
+    background: white;
+    border-radius: var(--radius-xl);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.nav-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 14px 18px;
+    border: none;
+    background: none;
+    color: var(--text);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: var(--radius-lg);
+    transition: all 0.2s ease;
+    gap: 12px;
+    margin-bottom: 5px;
+}
+
+.nav-item:last-child {
+    margin-bottom: 0;
+}
+
+.nav-icon {
+    font-size: 1.2rem;
+    opacity: 0.7;
+}
+
+.nav-item:hover {
+    background: #f1f5f9;
+    color: var(--uh-primary);
+}
+
+.nav-item.active {
+    background: rgba(45, 90, 39, 0.1);
+    color: var(--uh-primary);
+}
+
+.nav-item.active .nav-icon {
+    opacity: 1;
+}
+
+.nav-item.logout-link {
+    color: #ef4444;
+    margin-top: 15px;
+    border-top: 1px solid #f1f5f9;
+    border-radius: 0;
+    padding-top: 20px;
+}
+
+/* Main Content Styling */
+.profile-main {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.content-card {
+    background: white;
+    border-radius: var(--radius-xl);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 25px 30px;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-icon {
+    font-size: 1.3rem;
+    color: var(--primary);
+}
+
+.card-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.card-body {
+    padding: 30px;
+}
+
+/* Grid Layout for Items */
+.item-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.item-card {
+    padding: 20px;
+    background: #f8fafc;
+    border: 1px solid #f1f5f9;
+    border-radius: var(--radius-lg);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.item-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--uh-primary);
+}
+
+.item-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.item-details h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.status-pill {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.status-active {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-upcoming {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.status-completed {
+    background: #f0fdf4;
+    color: #166534;
+}
+
+.status-pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.item-meta p {
+    margin: 4px 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.price-text {
+    font-weight: 700;
+    color: var(--uh-primary);
+    font-size: 1rem;
+}
+
+/* Empty State Styling */
+.empty-state-card {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.empty-icon {
+    font-size: 3.5rem;
+    color: #cbd5e1;
+    margin-bottom: 20px;
+}
+
+.empty-state-card p {
+    color: var(--text-muted);
+    margin-bottom: 25px;
+    font-weight: 500;
+}
+
+.cta-button {
+    padding: 12px 24px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    font-weight: 700;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px -1px rgba(45, 90, 39, 0.2);
+}
+
+.cta-button:hover {
+    background: #23481f;
+    transform: scale(1.02);
+}
+
+.cta-button.secondary {
+    background: #f1f5f9;
+    color: var(--text);
+    box-shadow: none;
+}
+
+.cta-button.secondary:hover {
+    background: #e2e8f0;
+}
+
+/* Order History List */
+.order-history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.order-history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: var(--radius-lg);
+    border: 1px solid #f1f5f9;
+}
+
+.oh-info h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.oh-info p {
+    margin: 4px 0 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.oh-meta {
+    text-align: right;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.oh-price {
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--primary);
+}
+
+@media (max-width: 1024px) {
+    .profile-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .profile-sidebar {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+}
+
+@media (max-width: 640px) {
+    .profile-sidebar {
+        grid-template-columns: 1fr;
+    }
+
+    .item-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,11 +1,14 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
+import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import { ProtectedAdminRoute } from './components/ProtectedAdminRoute';
+import { ProtectedRoute } from './components/ProtectedRoute';
 import Home from './pages/Home';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
+import Login from './pages/Login';
 import './App.css';
 
 // Below-the-fold / non-LCP: lazy load to shrink main bundle and improve TBT/LCP
@@ -29,6 +32,8 @@ const Privacy = lazy(() => import('./pages/Privacy'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Checkout = lazy(() => import('./pages/Checkout'));
 const OrderSuccess = lazy(() => import('./pages/OrderSuccess'));
+const Profile = lazy(() => import('./pages/Profile'));
+const Subscriptions = lazy(() => import('./pages/Subscriptions'));
 
 function AppContent({ theme, toggleTheme }) {
   const location = useLocation();
@@ -55,6 +60,9 @@ function AppContent({ theme, toggleTheme }) {
               <Route path="/admin-login" element={<AdminLogin />} />
               <Route path="/admin/dashboard" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
               <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+              <Route path="/subscriptions" element={<Subscriptions />} />
               <Route path="/" element={<Home />} />
               <Route path="/workshops" element={<Workshops />} />
               <Route path="/workshops/:id" element={<WorkshopDetail />} />
@@ -125,12 +133,14 @@ function App() {
 
   return (
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-      <CartProvider>
-        <div className="App">
-          <a href="#main-content" className="skip-link">Skip to main content</a>
-          <AppContent theme={theme} toggleTheme={toggleTheme} />
-        </div>
-      </CartProvider>
+      <AuthProvider>
+        <CartProvider>
+          <div className="App">
+            <a href="#main-content" className="skip-link">Skip to main content</a>
+            <AppContent theme={theme} toggleTheme={toggleTheme} />
+          </div>
+        </CartProvider>
+      </AuthProvider>
     </Router>
   );
 }

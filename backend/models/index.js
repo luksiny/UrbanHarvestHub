@@ -6,10 +6,22 @@ const Booking = require('./Booking');
 const Order = require('./Order');
 const OrderItem = require('./OrderItem');
 const Admin = require('./Admin');
+const User = require('./User');
+const Review = require('./Review');
+const Subscription = require('./Subscription');
 
-// Associations (foreignKey is the attribute name on Booking; column is workshop_id)
-Booking.belongsTo(Workshop, { foreignKey: 'workshopId', as: 'Workshop' });
+// Associations
 Workshop.hasMany(Booking, { foreignKey: 'workshopId', as: 'Bookings' });
+Booking.belongsTo(Workshop, { foreignKey: 'workshopId', as: 'Workshop' });
+
+Booking.belongsTo(User, { foreignKey: 'userId', as: 'User' });
+User.hasMany(Booking, { foreignKey: 'userId', as: 'Bookings' });
+
+User.hasMany(Review, { foreignKey: 'userId', as: 'Reviews' });
+Review.belongsTo(User, { foreignKey: 'userId', as: 'User' });
+
+User.hasMany(Subscription, { foreignKey: 'userId', as: 'Subscriptions' });
+Subscription.belongsTo(User, { foreignKey: 'userId', as: 'User' });
 
 // Order <-> OrderItem <-> Product (foreign key constraints for fully relational orders)
 Order.hasMany(OrderItem, { foreignKey: 'orderId', as: 'OrderItems' });
@@ -30,5 +42,8 @@ module.exports = {
   Order,
   OrderItem,
   Admin,
+  User,
+  Review,
+  Subscription,
   syncDatabase,
 };

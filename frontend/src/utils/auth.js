@@ -1,4 +1,4 @@
-const ADMIN_TOKEN_KEY = 'uh_admin_token';
+const ADMIN_TOKEN_KEY = 'adminToken';
 
 export function getAdminToken() {
   return localStorage.getItem(ADMIN_TOKEN_KEY);

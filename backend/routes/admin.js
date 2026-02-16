@@ -3,7 +3,7 @@ const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const { Op } = require('sequelize');
-const { Admin, Order, Workshop } = require('../models');
+const { Admin, Order, Workshop, User } = require('../models');
 const { verifyToken, JWT_SECRET } = require('../middleware/verifyToken');
 
 const TOKEN_EXPIRY = '2h';
@@ -21,10 +21,18 @@ router.post('/login', validateLogin, async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Validation failed', errors: errors.array() });
     }
     const { email, password } = req.body;
+    console.log(`Login attempt for Admin: ${email}`);
     const admin = await Admin.findOne({ where: { email } });
-    if (!admin || !(await admin.comparePassword(password))) {
+    if (!admin) {
+      console.log(`Admin not found: ${email}`);
       return res.status(401).json({ success: false, message: 'Invalid email or password.' });
     }
+    const isMatch = await admin.comparePassword(password);
+    if (!isMatch) {
+      console.log(`Password mismatch for Admin: ${email}`);
+      return res.status(401).json({ success: false, message: 'Invalid email or password.' });
+    }
+    console.log(`Admin login successful: ${email}`);
     const token = jwt.sign(
       { adminId: admin.id },
       JWT_SECRET,
@@ -48,10 +56,11 @@ router.post('/login', validateLogin, async (req, res, next) => {
 
 router.get('/stats', verifyToken, async (req, res, next) => {
   try {
-    const [totalOrders, revenueResult, activeWorkshops] = await Promise.all([
+    const [totalOrders, revenueResult, activeWorkshops, totalUsers] = await Promise.all([
       Order.count(),
       Order.sum('total'),
       Workshop.count({ where: { date: { [Op.gte]: new Date() } } }),
+      User.count(),
     ]);
     const totalRevenue = Number(revenueResult) || 0;
     res.json({
@@ -60,6 +69,7 @@ router.get('/stats', verifyToken, async (req, res, next) => {
         totalOrders,
         totalRevenue: Math.round(totalRevenue * 100) / 100,
         activeWorkshops,
+        totalUsers,
       },
     });
   } catch (error) {

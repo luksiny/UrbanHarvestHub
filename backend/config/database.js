@@ -11,6 +11,13 @@ const DB_PASSWORD = process.env.DB_PASSWORD || '';
 const DB_HOST = process.env.DB_HOST || 'localhost';
 const DB_PORT = process.env.DB_PORT || 3306;
 
+console.log('Database Configuration:');
+console.log(`  Host: ${DB_HOST}`);
+console.log(`  Port: ${DB_PORT}`);
+console.log(`  User: ${DB_USER}`);
+console.log(`  Database: ${DB_NAME}`);
+console.log(`  SSL Enabled: ${process.env.NODE_ENV === 'production' || (DB_HOST !== 'localhost' && DB_HOST !== '127.0.0.1')}`);
+
 const options = {
   host: DB_HOST,
   port: DB_PORT,
@@ -34,13 +41,12 @@ if (fs.existsSync(caPath)) {
     ca: fs.readFileSync(caPath),
     rejectUnauthorized: true,
   };
-} else if (process.env.NODE_ENV === 'production') {
-  // Fallback for production if no specific cert file is found but SSL is expected
-  // Some providers like TiDB or PlanetScale might need this
-  console.log('⚠️ Production environment detected but no CA cert found at /etc/secrets/ca.pem. Using basic SSL.');
+} else if (process.env.NODE_ENV === 'production' || (DB_HOST !== 'localhost' && DB_HOST !== '127.0.0.1')) {
+  // Fallback for production or remote dev (e.g. Aiven)
+  console.log('⚠️ Remote database detected. Using basic SSL.');
   options.dialectOptions.ssl = {
     require: true,
-    rejectUnauthorized: false, // Set to true if you have the CA cert in an ENV variable
+    rejectUnauthorized: false, // Allow self-signed certs for dev ease
   };
 }
 

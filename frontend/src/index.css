@@ -14,10 +14,11 @@
   --soil: #4B3621;
   --soil-soft: #5C4528;
   /* Semantic */
-  --font-display: 'Inter', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: 'Roboto', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --primary: #87A96B;
-  --primary-soft: #9BB87E;
+  --font-display: 'Outfit', 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --primary: #2d5a27;
+  --uh-primary: #2d5a27;
+  --primary-soft: #3a7532;
   --accent: #87A96B;
   --accent-hover: #9BB87E;
   --text: #4B3621;
@@ -72,7 +73,12 @@ body {
   transition: background-color var(--transition), color var(--transition);
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-display);
   font-weight: 600;
   letter-spacing: -0.02em;

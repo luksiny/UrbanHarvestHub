@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { workshopsAPI, productsAPI, eventsAPI } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import { getProductImage, resolveProductImagePath } from '../utils/productImages';
 import './Home.css';
 
@@ -30,6 +31,7 @@ const getEventImage = (eventTitle) => {
 };
 
 const Home = () => {
+  const { user } = useAuth();
   const [workshops, setWorkshops] = useState([]);
   const [products, setProducts] = useState([]);
   const [events, setEvents] = useState([]);
@@ -144,8 +146,8 @@ const Home = () => {
         <div className="hero-overlay" aria-hidden="true" />
         <div className="container">
           <div className="hero-content">
-            <h1>Find your next organic harvest</h1>
-            <p>Discover local workshops, fresh produce, and community events.</p>
+            <h1>{user ? `Hello, ${user.name.split(' ')[0]}!` : 'Find your next organic harvest'}</h1>
+            <p>{user ? 'Ready to continue your sustainable journey?' : 'Discover local workshops, fresh produce, and community events.'}</p>
             <div className="search-pill-bar" role="search">
               <input
                 type="search"

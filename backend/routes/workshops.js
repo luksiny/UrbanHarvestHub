@@ -4,6 +4,7 @@ const { body, validationResult, query } = require('express-validator');
 const { Op } = require('sequelize');
 const { Workshop, Booking } = require('../models');
 const { buildSearchWhere, workshopBody } = require('../utils/apiHelper');
+const { verifyToken } = require('../middleware/verifyToken');
 
 const validateWorkshop = [
   body('title').trim().notEmpty().withMessage('Title is required').isLength({ max: 200 }),
@@ -77,7 +78,7 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', validateWorkshop, async (req, res, next) => {
+router.post('/', verifyToken, validateWorkshop, async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -101,7 +102,7 @@ router.post('/', validateWorkshop, async (req, res, next) => {
   }
 });
 
-router.put('/:id', validateWorkshop, async (req, res, next) => {
+router.put('/:id', verifyToken, validateWorkshop, async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -129,7 +130,7 @@ router.put('/:id', validateWorkshop, async (req, res, next) => {
   }
 });
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', verifyToken, async (req, res, next) => {
   try {
     const workshop = await Workshop.findByPk(req.params.id);
     if (!workshop) {

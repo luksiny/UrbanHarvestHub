@@ -1,6 +1,6 @@
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
-const { sequelize, Workshop, Product, Event, Booking, Admin } = require('./models');
+const { sequelize, Workshop, Product, Event, Booking, Admin, User, Review, Subscription, Order, OrderItem } = require('./models');
 
 const workshopRows = [
   {
@@ -105,17 +105,41 @@ const eventRows = [
   },
 ];
 
+const userRows = [
+  {
+    name: 'Alice Green',
+    email: 'alice@example.com',
+    password: 'User123!',
+  },
+  {
+    name: 'Bob Gardener',
+    email: 'bob@example.com',
+    password: 'User123!',
+  },
+];
+
 async function seed() {
   try {
+    const { host, port, database, username } = sequelize.config;
+    console.log('Seed Config:', { host, port, database, username });
+
     await sequelize.authenticate();
     console.log('Connected to MySQL');
 
-    await sequelize.sync({ alter: true });
+    await sequelize.sync();
 
+    // Clear dependent tables first
+    await Review.destroy({ where: {} });
+    await Subscription.destroy({ where: {} });
+    await OrderItem.destroy({ where: {} });
+    await Order.destroy({ where: {} });
     await Booking.destroy({ where: {} });
+
+    // Clear main entities
     await Workshop.destroy({ where: {} });
     await Product.destroy({ where: {} });
     await Event.destroy({ where: {} });
+    await User.destroy({ where: {} });
 
     const defaultAdminEmail = 'admin@urbanharvesthub.com';
     let admin = await Admin.findOne({ where: { email: defaultAdminEmail } });
@@ -128,14 +152,42 @@ async function seed() {
       console.log('✅ Default admin created:', defaultAdminEmail, '(password: Admin123!)');
     }
 
+    // Create Users (with hooks for password hashing)
+    const users = await User.bulkCreate(userRows, { individualHooks: true });
+    console.log(`✅ ${users.length} users created`);
+
     const workshops = await Workshop.bulkCreate(workshopRows);
     const products = await Product.bulkCreate(productRows);
     const events = await Event.bulkCreate(eventRows);
+
+    // Create Sample Reviews
+    if (users.length > 0 && products.length > 0) {
+      await Review.create({
+        rating: 5,
+        comment: 'Absolutely fresh and delicious!',
+        userId: users[0].id,
+        targetId: products[0].id, // Fresh Tomatoes
+        targetType: 'Product',
+      });
+    }
+
+    // Create Sample Subscription
+    if (users.length > 0) {
+      await Subscription.create({
+        userId: users[0].id, // Alice
+        boxType: 'Weekly Veggie',
+        status: 'active',
+        frequency: 'weekly',
+        price: 29.99,
+      });
+    }
 
     console.log('✅ Seed data created successfully!');
     console.log(`   - ${workshops.length} workshops`);
     console.log(`   - ${products.length} products`);
     console.log(`   - ${events.length} events`);
+    console.log(`   - ${users.length} users`);
+    console.log('   - Reviews and Subscriptions added');
     process.exit(0);
   } catch (err) {
     console.error('❌ Error seeding data:', err);

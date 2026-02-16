@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { adminAPI } from '../services/api';
-import { setAdminToken, isAdminTokenValid } from '../utils/auth';
+import { useAuth } from '../context/AuthContext';
 import './AdminLogin.css';
 
 const AdminLogin = () => {
   const navigate = useNavigate();
+  const { admin, loginAdmin } = useAuth();
+
   useEffect(() => {
-    if (isAdminTokenValid()) navigate('/admin/dashboard', { replace: true });
-  }, [navigate]);
+    if (admin) navigate('/admin/dashboard', { replace: true });
+  }, [navigate, admin]);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -20,13 +23,13 @@ const AdminLogin = () => {
     setLoading(true);
     try {
       const res = await adminAPI.login(email.trim(), password);
-      const data = res?.data ?? res;
-      const token = data?.token ?? data?.data?.token;
-      if (!token) throw new Error('No token received');
-      setAdminToken(token);
+      const data = res?.data?.data ?? res?.data ?? res;
+      if (!data.token) throw new Error('No token received');
+
+      loginAdmin(data.admin, data.token);
       navigate('/admin/dashboard', { replace: true });
     } catch (err) {
-      setError(err.message || 'Invalid email or password.');
+      setError(err.response?.data?.message || err.message || 'Invalid email or password.');
     } finally {
       setLoading(false);
     }
