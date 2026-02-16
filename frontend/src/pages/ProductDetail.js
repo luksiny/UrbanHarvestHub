@@ -156,7 +156,7 @@ const ProductDetail = () => {
             </div>
           </div>
         </div>
-        <ReviewSection targetType="Product" targetId={product.id} />
+        <ReviewSection targetType="Product" targetId={product._id ?? product.id} />
       </div>
     </div>
   );

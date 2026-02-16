@@ -13,8 +13,9 @@ const ReviewSection = ({ targetType, targetId }) => {
 
     const fetchReviews = useCallback(async () => {
         try {
-            const response = await reviewsAPI.getByTarget(targetType, targetId);
-            setReviews(response.data);
+            const res = await reviewsAPI.getByTarget(targetType, targetId);
+            const data = res?.data ?? res;
+            setReviews(Array.isArray(data) ? data : []);
         } catch (err) {
             console.error('Failed to fetch reviews:', err);
         } finally {
@@ -76,7 +77,7 @@ const ReviewSection = ({ targetType, targetId }) => {
 
             {loading ? <p>Loading reviews...</p> : (
                 <div className="review-list">
-                    {reviews.length > 0 ? reviews.map(review => (
+                    {reviews?.length > 0 ? reviews.map(review => (
                         <div key={review._id} className="review-item glass">
                             <div className="review-header">
                                 <strong>{review.User?.name}</strong>
