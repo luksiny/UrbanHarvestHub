@@ -1,12 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { workshopsAPI, productsAPI, eventsAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { getProductImage, resolveProductImagePath } from '../utils/productImages';
 import './Home.css';
-
-/* Hero image: leafy green garden (use hero-img.jpg or hero img.jpg in public/images/products) */
-const HERO_IMAGE = '/images/products/hero-img.jpg';
 
 // Helper function to get workshop image path
 const getWorkshopImage = (workshopTitle) => {
@@ -39,23 +36,6 @@ const Home = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('all'); // all, seeds, live-workshops, tools, soil
-  const homeRef = useRef(null);
-
-  useEffect(() => {
-    const root = homeRef.current;
-    if (!root) return;
-    const sections = root.querySelectorAll('.home-section');
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) entry.target.classList.add('animate-in');
-        });
-      },
-      { rootMargin: '0px 0px -40px 0px', threshold: 0.1 }
-    );
-    sections.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, [loading]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -141,9 +121,8 @@ const Home = () => {
 
   // Always render shell so LCP (hero) paints immediately; show loading only in data sections
   return (
-    <div className="home" ref={homeRef}>
-      <section className="hero" style={{ backgroundImage: `url(${HERO_IMAGE})` }}>
-        <div className="hero-overlay" aria-hidden="true" />
+    <div className="home">
+      <section className="hero">
         <div className="container">
           <div className="hero-content">
             <h1>{user ? `Hello, ${user.name.split(' ')[0]}!` : 'Find your next organic harvest'}</h1>
@@ -151,7 +130,7 @@ const Home = () => {
             <div className="search-pill-bar" role="search">
               <input
                 type="search"
-                className="search-pill-input glass"
+                className="search-pill-input"
                 placeholder="Search workshops, products, events..."
                 value={searchTerm}
                 onChange={handleSearchChange}
@@ -160,7 +139,7 @@ const Home = () => {
               <div className="filter-pills">
                 <button
                   type="button"
-                  className={`filter-pill glass ${activeCategory === 'all' ? 'active' : ''}`}
+                  className={`filter-pill ${activeCategory === 'all' ? 'active' : ''}`}
                   onClick={() => handleCategoryClick('all')}
                   aria-pressed={activeCategory === 'all'}
                 >
@@ -168,7 +147,7 @@ const Home = () => {
                 </button>
                 <button
                   type="button"
-                  className={`filter-pill glass ${activeCategory === 'seeds' ? 'active' : ''}`}
+                  className={`filter-pill ${activeCategory === 'seeds' ? 'active' : ''}`}
                   onClick={() => handleCategoryClick('seeds')}
                   aria-pressed={activeCategory === 'seeds'}
                 >
@@ -176,7 +155,7 @@ const Home = () => {
                 </button>
                 <button
                   type="button"
-                  className={`filter-pill glass ${activeCategory === 'live-workshops' ? 'active' : ''}`}
+                  className={`filter-pill ${activeCategory === 'live-workshops' ? 'active' : ''}`}
                   onClick={() => handleCategoryClick('live-workshops')}
                   aria-pressed={activeCategory === 'live-workshops'}
                 >
@@ -184,7 +163,7 @@ const Home = () => {
                 </button>
                 <button
                   type="button"
-                  className={`filter-pill glass ${activeCategory === 'tools' ? 'active' : ''}`}
+                  className={`filter-pill ${activeCategory === 'tools' ? 'active' : ''}`}
                   onClick={() => handleCategoryClick('tools')}
                   aria-pressed={activeCategory === 'tools'}
                 >
@@ -192,7 +171,7 @@ const Home = () => {
                 </button>
                 <button
                   type="button"
-                  className={`filter-pill glass ${activeCategory === 'soil' ? 'active' : ''}`}
+                  className={`filter-pill ${activeCategory === 'soil' ? 'active' : ''}`}
                   onClick={() => handleCategoryClick('soil')}
                   aria-pressed={activeCategory === 'soil'}
                 >
@@ -206,7 +185,7 @@ const Home = () => {
 
       {error && <div className="error container">{error}</div>}
 
-      <section className="about-section home-section">
+      <section className="about-section">
         <div className="container">
           <div className="about-content">
             <div className="about-text">
@@ -230,7 +209,7 @@ const Home = () => {
                 </div>
               </div>
               <div className="about-cta">
-                <Link to="/workshops" className="btn btn-primary btn-accent">Get Started</Link>
+                <Link to="/workshops" className="btn btn-primary">Get Started</Link>
               </div>
             </div>
           </div>
@@ -240,7 +219,7 @@ const Home = () => {
       <div className="container">
 
         {showWorkshops && (
-          <section className="section home-section">
+          <section className="section">
             <div className="section-header">
               <h2>Featured Workshops</h2>
               <Link to="/workshops" className="btn btn-secondary">View All</Link>
@@ -252,14 +231,14 @@ const Home = () => {
                 <p>No workshops found. Try adjusting your search or filters.</p>
               </div>
             ) : (
-              <div className="grid bento-grid workshop-cards">
+              <div className="grid bento-grid">
                 {filteredWorkshops.map((workshop, index) => {
                   const imageUrl = workshop.image || getWorkshopImage(workshop.title);
                   return (
                     <Link
                       key={workshop._id}
                       to={`/workshops/${workshop._id}`}
-                      className={`card bento-card workshop-card bento-card-${(index % 4) + 1}`}
+                      className={`card bento-card bento-card-${(index % 4) + 1}`}
                     >
                       <div className="workshop-image-container">
                         <img
@@ -274,16 +253,14 @@ const Home = () => {
                             e.target.src = '/images/workshops/workshop1.jpg';
                           }}
                         />
-                        <div className="workshop-card-overlay">
-                          <h3 className="workshop-card-title">{workshop.title}</h3>
-                          <span className="workshop-price-pill">${workshop.price}</span>
-                        </div>
                       </div>
-                      <p className="text-light workshop-card-desc">
+                      <h3>{workshop.title}</h3>
+                      <p className="text-light">
                         {workshop.description ? workshop.description.substring(0, 120) + '...' : 'No description available.'}
                       </p>
                       <div className="card-footer">
                         <span className="badge">{workshop.category}</span>
+                        <span className="price">${workshop.price}</span>
                       </div>
                     </Link>
                   );
@@ -294,7 +271,7 @@ const Home = () => {
         )}
 
         {showProducts && (
-          <section className="section home-section">
+          <section className="section">
             <div className="section-header">
               <h2>Fresh Products</h2>
               <Link to="/products" className="btn btn-secondary">View All</Link>
@@ -353,7 +330,7 @@ const Home = () => {
         )}
 
         {showEvents && (
-          <section className="section home-section">
+          <section className="section">
             <div className="section-header">
               <h2>Upcoming Events</h2>
               <Link to="/events" className="btn btn-secondary">View All</Link>

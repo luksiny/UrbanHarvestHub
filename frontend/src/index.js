@@ -11,7 +11,7 @@ root.render(
   </React.StrictMode>
 );
 
-// Defer SW registration until after first paint (improves LCP / TBT)
+// Register SW on load so PWA install (beforeinstallprompt) can fire reliably
 function registerSW() {
   serviceWorkerRegistration.register({
     onSuccess: () => console.log('Service Worker registered successfully'),
@@ -30,8 +30,4 @@ function registerSW() {
     }
   });
 }
-if (typeof requestIdleCallback !== 'undefined') {
-  requestIdleCallback(() => registerSW(), { timeout: 2000 });
-} else {
-  window.addEventListener('load', () => setTimeout(registerSW, 0));
-}
+window.addEventListener('load', () => setTimeout(registerSW, 100));

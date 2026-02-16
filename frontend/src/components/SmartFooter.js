@@ -21,7 +21,7 @@ const IconCloudSync = () => (
 );
 
 const IconInstallApp = () => (
-  <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
     <polyline points="7 10 12 15 17 10" />
     <line x1="12" y1="15" x2="12" y2="3" />
@@ -118,20 +118,24 @@ const SmartFooter = () => {
     };
   }, []);
 
+  const [showInstallHint, setShowInstallHint] = useState(false);
+  const [installIconError, setInstallIconError] = useState(false);
+
   const handleInstall = async () => {
     if (installLoading) return;
 
-    // Check if it's iOS
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
     if (isIOS || isSafari) {
-      alert("To Install: Tap the 'Share' button (square with arrow up) and select 'Add to Home Screen'.");
+      setShowInstallHint(true);
+      setTimeout(() => setShowInstallHint(false), 10000);
       return;
     }
 
     if (!deferredPrompt) {
-      alert("The app is ready to install! Please click your browser's menu (⋮ or ⇧) and select 'Install' or 'Add to Home Screen'.");
+      setShowInstallHint(true);
+      setTimeout(() => setShowInstallHint(false), 10000);
       return;
     }
 
@@ -139,102 +143,130 @@ const SmartFooter = () => {
     try {
       await deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
-      console.log('📦 Install outcome:', outcome);
-      if (outcome === 'accepted') setIsInstalled(true);
+      if (outcome === 'accepted') {
+        setIsInstalled(true);
+      }
     } catch (e) {
-      console.error('📦 Install error:', e);
+      setShowInstallHint(true);
+      setTimeout(() => setShowInstallHint(false), 10000);
     }
     setDeferredPrompt(null);
     setInstallLoading(false);
   };
 
-  const [debugInfo, setDebugInfo] = useState('');
-
-  useEffect(() => {
-    console.log('📦 PWA State:', { isInstalled, hasPrompt: !!deferredPrompt });
-  }, [isInstalled, deferredPrompt]);
-
   const showInstallButton = !isInstalled;
   const isPromptReady = !!deferredPrompt;
 
   return (
-    <footer className="smart-footer" role="contentinfo">
-      <div className="smart-footer__inner">
-        {/* Col 1: Status pill (left) */}
-        <div className="smart-footer__col smart-footer__col--status">
-          <div
-            className={`smart-footer__status-pill ${!isOnline ? 'smart-footer__status-pill--offline' : ''}`}
-            role="status"
-            aria-live="polite"
-          >
-            <span className="smart-footer__status-icon" aria-hidden="true">
-              {!isOnline ? <IconCloudSlash /> : <IconCloudSync />}
-            </span>
-            <span>{!isOnline ? 'Working Offline' : 'All Systems Syncing'}</span>
-          </div>
-        </div>
-
-        {/* Col 2: Links + Social in one horizontal row */}
-        <div className="smart-footer__col smart-footer__col--links">
-          <nav className="smart-footer__row" aria-label="Footer">
-            <Link to="/about" className="smart-footer__link" aria-label="About">
-              <IconAbout />
-            </Link>
-            <Link to="/privacy" className="smart-footer__link" aria-label="Privacy">
-              <IconPrivacy />
-            </Link>
-            <Link to="/contact" className="smart-footer__link" aria-label="Contact">
-              <IconContact />
-            </Link>
-            <span className="smart-footer__row-divider" aria-hidden="true" />
-            {isAdminLoggedIn ? (
-              <Link to="/admin/dashboard" className="smart-footer__admin-link" aria-label="Go to admin dashboard">
-                Go to Dashboard
-              </Link>
-            ) : (
-              <Link to="/admin-login" className="smart-footer__admin-link" aria-label="Admin portal login">
-                Admin Portal
-              </Link>
-            )}
-            <span className="smart-footer__row-divider" aria-hidden="true" />
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="smart-footer__link" aria-label="Twitter">
-              <IconTwitter />
-            </a>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="smart-footer__link" aria-label="Facebook">
-              <IconFacebook />
-            </a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="smart-footer__link" aria-label="Instagram">
-              <IconInstagram />
-            </a>
-          </nav>
-        </div>
-
-        {/* Col 3: Install (right) */}
-        <div className="smart-footer__col smart-footer__col--install">
-          {showInstallButton && (
+    <>
+      {showInstallHint && (
+        <div className="install-hint-toast" role="dialog" aria-labelledby="install-hint-title">
+          <div className="install-hint-content">
+            <span className="install-hint-icon" aria-hidden="true">⬆️</span>
+            <div className="install-hint-text">
+              <strong id="install-hint-title">Install this app</strong>
+              <p>Check your address bar (top right):</p>
+              <ul style={{ paddingLeft: '20px', margin: '8px 0', fontSize: '0.9rem', textAlign: 'left' }}>
+                <li>If you see <strong>Open in App</strong>, it&apos;s already installed!</li>
+                <li>Otherwise, look for the <strong>Install icon <small>(computer with arrow)</small></strong>.</li>
+              </ul>
+            </div>
             <button
               type="button"
-              className={`smart-footer__install-btn ${isPromptReady ? 'smart-footer__install-btn--ready' : ''}`}
-              onClick={handleInstall}
-              disabled={installLoading}
-              aria-label="Install Urban Harvest app"
+              className="install-hint-close"
+              onClick={() => setShowInstallHint(false)}
+              aria-label="Close"
             >
-              <span className="smart-footer__install-icon" aria-hidden="true">
-                <img
-                  src="/images/icons/favicon.jpg"
-                  alt="App Icon"
-                  style={{ width: '20px', height: '20px', borderRadius: '4px', objectFit: 'cover' }}
-                />
-              </span>
-              <span>{installLoading ? 'Installing…' : 'Install App'}</span>
+              ✕
             </button>
-          )}
+          </div>
         </div>
+      )}
+      <footer className="smart-footer" role="contentinfo">
+        <div className="smart-footer__inner">
+          {/* Col 1: Status pill (left) */}
+          <div className="smart-footer__col smart-footer__col--status">
+            <div
+              className={`smart-footer__status-pill ${!isOnline ? 'smart-footer__status-pill--offline' : ''}`}
+              role="status"
+              aria-live="polite"
+            >
+              <span className="smart-footer__status-icon" aria-hidden="true">
+                {!isOnline ? <IconCloudSlash /> : <IconCloudSync />}
+              </span>
+              <span>{!isOnline ? 'Working Offline' : 'All Systems Syncing'}</span>
+            </div>
+          </div>
 
-        {/* Tagline – full width below */}
-        <p className="smart-footer__tagline">Powered by Eco-Tech</p>
-      </div>
-    </footer>
+          {/* Col 2: Links + Social in one horizontal row */}
+          <div className="smart-footer__col smart-footer__col--links">
+            <nav className="smart-footer__row" aria-label="Footer">
+              <Link to="/about" className="smart-footer__link" aria-label="About">
+                <IconAbout />
+              </Link>
+              <Link to="/privacy" className="smart-footer__link" aria-label="Privacy">
+                <IconPrivacy />
+              </Link>
+              <Link to="/contact" className="smart-footer__link" aria-label="Contact">
+                <IconContact />
+              </Link>
+              <span className="smart-footer__row-divider" aria-hidden="true" />
+              {isAdminLoggedIn ? (
+                <Link to="/admin/dashboard" className="smart-footer__admin-link" aria-label="Go to admin dashboard">
+                  Go to Dashboard
+                </Link>
+              ) : (
+                <Link to="/admin-login" className="smart-footer__admin-link" aria-label="Admin portal login">
+                  Admin Portal
+                </Link>
+              )}
+              <span className="smart-footer__row-divider" aria-hidden="true" />
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="smart-footer__link" aria-label="Twitter">
+                <IconTwitter />
+              </a>
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="smart-footer__link" aria-label="Facebook">
+                <IconFacebook />
+              </a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="smart-footer__link" aria-label="Instagram">
+                <IconInstagram />
+              </a>
+            </nav>
+          </div>
+
+          {/* Col 3: Install (right) – PWA install from footer */}
+          <div className="smart-footer__col smart-footer__col--install">
+            {showInstallButton && (
+              <button
+                type="button"
+                className={`smart-footer__install-btn ${isPromptReady ? 'smart-footer__install-btn--ready' : ''}`}
+                onClick={handleInstall}
+                disabled={installLoading}
+                aria-label="Install Urban Harvest app"
+              >
+                <span className="smart-footer__install-icon" aria-hidden="true">
+                  {!installIconError ? (
+                    <img
+                      src="/images/icons/favicon.jpg"
+                      alt=""
+                      width="20"
+                      height="20"
+                      style={{ width: '20px', height: '20px', borderRadius: '4px', objectFit: 'cover' }}
+                      onError={() => setInstallIconError(true)}
+                    />
+                  ) : (
+                    <IconInstallApp />
+                  )}
+                </span>
+                <span>{installLoading ? 'Installing…' : 'Install App'}</span>
+              </button>
+            )}
+          </div>
+
+          {/* Tagline – full width below */}
+          <p className="smart-footer__tagline">Powered by Eco-Tech</p>
+        </div>
+      </footer>
+    </>
   );
 };
 

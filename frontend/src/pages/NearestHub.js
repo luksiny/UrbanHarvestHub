@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { workshopsAPI, eventsAPI } from '../services/api';
-import { FaMapMarkerAlt, FaRoute, FaCalendarAlt } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaRoute } from 'react-icons/fa';
 import './NearestHub.css';
 
 // Calculate distance between two coordinates using Haversine formula
@@ -162,27 +162,25 @@ const NearestHub = () => {
             <h2>
               <FaRoute /> Nearest Workshops
             </h2>
-            <div className="nearest-hub-scroll">
-              <div className="nearest-hub-grid">
-                {nearestWorkshops.map((workshop) => (
-                  <Link
-                    key={workshop._id}
-                    to={`/workshops/${workshop._id}`}
-                    className="nearest-hub-card"
-                  >
-                    <span className="nearest-hub-distance-pill" aria-label="Distance">
-                      <FaMapMarkerAlt className="nearest-hub-pill-icon" />
-                      <span className="nearest-hub-km">{workshop.distance.toFixed(2)} km away</span>
-                    </span>
-                    <h3 className="nearest-hub-card-title">{workshop.title}</h3>
-                    <p className="nearest-hub-card-desc">{workshop.description ? workshop.description.substring(0, 100) + '...' : '—'}</p>
-                    <div className="nearest-hub-card-footer">
-                      <span className="nearest-hub-badge">{workshop.category}</span>
-                      <span className="nearest-hub-price">${workshop.price}</span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+            <div className="grid">
+              {nearestWorkshops.map((workshop) => (
+                <Link
+                  key={workshop._id}
+                  to={`/workshops/${workshop._id}`}
+                  className="card"
+                >
+                  <h3>{workshop.title}</h3>
+                  <p className="text-light">{workshop.description ? workshop.description.substring(0, 100) + '...' : '—'}</p>
+                  <div className="distance-info">
+                    <FaMapMarkerAlt />
+                    <span className="distance">{workshop.distance.toFixed(2)} km away</span>
+                  </div>
+                  <div className="card-footer">
+                    <span className="badge">{workshop.category}</span>
+                    <span className="price">${workshop.price}</span>
+                  </div>
+                </Link>
+              ))}
             </div>
           </section>
         )}
@@ -192,40 +190,32 @@ const NearestHub = () => {
             <h2>
               <FaRoute /> Nearest Events
             </h2>
-            <div className="nearest-hub-scroll">
-              <div className="nearest-hub-grid">
-                {nearestEvents.map((event) => (
-                  <Link
-                    key={event._id}
-                    to={`/events/${event._id}`}
-                    className="nearest-hub-card"
-                  >
-                    <span className="nearest-hub-distance-pill" aria-label="Distance">
-                      <FaMapMarkerAlt className="nearest-hub-pill-icon" />
-                      <span className="nearest-hub-km">{event.distance.toFixed(2)} km away</span>
-                    </span>
-                    <h3 className="nearest-hub-card-title">{event.title}</h3>
-                    <p className="nearest-hub-card-desc">{event.description ? event.description.substring(0, 100) + '...' : '—'}</p>
-                    <div className="nearest-hub-card-footer">
-                      <span className="nearest-hub-badge">{event.category}</span>
-                      <span className="nearest-hub-date">
-                        <FaCalendarAlt className="nearest-hub-date-icon" />
-                        {event.date ? new Date(event.date).toLocaleDateString() : 'Date TBA'}
-                      </span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+            <div className="grid">
+              {nearestEvents.map((event) => (
+                <Link
+                  key={event._id}
+                  to={`/events/${event._id}`}
+                  className="card"
+                >
+                  <h3>{event.title}</h3>
+                  <p className="text-light">{event.description ? event.description.substring(0, 100) + '...' : '—'}</p>
+                  <div className="distance-info">
+                    <FaMapMarkerAlt />
+                    <span className="distance">{event.distance.toFixed(2)} km away</span>
+                  </div>
+                  <div className="card-footer">
+                    <span className="badge">{event.category}</span>
+                    <span className="date">{event.date ? new Date(event.date).toLocaleDateString() : 'Date TBA'}</span>
+                  </div>
+                </Link>
+              ))}
             </div>
           </section>
         )}
 
         {userLocation && nearestWorkshops.length === 0 && nearestEvents.length === 0 && (
-          <div className="nearest-hub-empty" aria-live="polite">
-            <div className="nearest-hub-empty-dots" aria-hidden="true">
-              <span /><span /><span />
-            </div>
-            <p className="nearest-hub-empty-text">Searching for nearby harvests...</p>
+          <div className="no-results">
+            <p>No workshops or events found with location data nearby.</p>
           </div>
         )}
 

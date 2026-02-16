@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA Test - Urban Harvest Hub</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f9f9f9;
+        }
+
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .status {
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        button {
+            background: #2D5A27;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: #3a7532;
+        }
+
+        pre {
+            background: #f3f4f6;
+            padding: 10px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🌱 Urban Harvest Hub - PWA Test Suite</h1>
+
+    <div class="test-section">
+        <h2>1. Service Worker Status</h2>
+        <div id="sw-status"></div>
+        <button onclick="checkServiceWorker()">Check SW</button>
+        <button onclick="unregisterSW()">Unregister SW</button>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Manifest & Icons</h2>
+        <div id="manifest-status"></div>
+        <button onclick="checkManifest()">Check Manifest</button>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Install Prompt</h2>
+        <div id="install-status"></div>
+        <button onclick="checkInstallability()">Check Installability</button>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Offline Test</h2>
+        <div id="offline-status"></div>
+        <button onclick="testOffline()">Test Offline Mode</button>
+        <p><small>This will try to load the homepage while simulating offline</small></p>
+    </div>
+
+    <div class="test-section">
+        <h2>5. Cache Status</h2>
+        <div id="cache-status"></div>
+        <button onclick="checkCaches()">Check Caches</button>
+        <button onclick="clearCaches()">Clear All Caches</button>
+    </div>
+
+    <script>
+        // Register Service Worker for this test page
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('✅ SW registered for test page:', reg.scope))
+                .catch(err => console.error('❌ SW registration failed:', err));
+        }
+
+        let deferredPrompt = null;
+
+        // Listen for install prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            console.log('✅ beforeinstallprompt fired!');
+        });
+
+        async function checkServiceWorker() {
+            const status = document.getElementById('sw-status');
+            if ('serviceWorker' in navigator) {
+                try {
+                    const registration = await navigator.serviceWorker.getRegistration();
+                    if (registration) {
+                        const sw = registration.active || registration.installing || registration.waiting;
+                        status.innerHTML = `
+              <div class="status success">
+                ✅ Service Worker Active<br>
+                <strong>Scope:</strong> ${registration.scope}<br>
+                <strong>State:</strong> ${sw ? sw.state : 'unknown'}<br>
+                <strong>Script URL:</strong> ${sw ? sw.scriptURL : 'N/A'}
+              </div>
+            `;
+                    } else {
+                        status.innerHTML = '<div class="status error">❌ No Service Worker registered</div>';
+                    }
+                } catch (err) {
+                    status.innerHTML = `<div class="status error">❌ Error: ${err.message}</div>`;
+                }
+            } else {
+                status.innerHTML = '<div class="status error">❌ Service Workers not supported</div>';
+            }
+        }
+
+        async function unregisterSW() {
+            if ('serviceWorker' in navigator) {
+                const registration = await navigator.serviceWorker.getRegistration();
+                if (registration) {
+                    await registration.unregister();
+                    document.getElementById('sw-status').innerHTML = '<div class="status warning">⚠️ Service Worker unregistered. Reload to re-register.</div>';
+                }
+            }
+        }
+
+        async function checkManifest() {
+            const status = document.getElementById('manifest-status');
+            try {
+                const response = await fetch('/manifest.json');
+                const manifest = await response.json();
+                status.innerHTML = `
+          <div class="status success">
+            ✅ Manifest loaded<br>
+            <strong>Name:</strong> ${manifest.name}<br>
+            <strong>Short Name:</strong> ${manifest.short_name}<br>
+            <strong>Icons:</strong> ${manifest.icons.length} defined<br>
+            <pre>${JSON.stringify(manifest.icons, null, 2)}</pre>
+          </div>
+        `;
+            } catch (err) {
+                status.innerHTML = `<div class="status error">❌ Manifest error: ${err.message}</div>`;
+            }
+        }
+
+        function checkInstallability() {
+            const status = document.getElementById('install-status');
+            const isSecure = window.location.protocol === 'https:' || window.location.hostname === 'localhost';
+            const hasPrompt = deferredPrompt !== null;
+
+            let html = '<div class="status ' + (isSecure ? 'success' : 'error') + '">';
+            html += isSecure ? '✅ Secure context (HTTPS/localhost)' : '❌ Insecure context - PWA install disabled';
+            html += '</div>';
+
+            html += '<div class="status ' + (hasPrompt ? 'success' : 'warning') + '">';
+            html += hasPrompt ? '✅ Install prompt available' : '⚠️ Install prompt not available (may already be installed or criteria not met)';
+            html += '</div>';
+
+            status.innerHTML = html;
+        }
+
+        async function testOffline() {
+            const status = document.getElementById('offline-status');
+            status.innerHTML = '<div class="status warning">⏳ Testing offline capability...</div>';
+
+            try {
+                // Try to fetch the homepage
+                const response = await fetch('/', { cache: 'no-store' });
+                if (response.ok) {
+                    status.innerHTML = '<div class="status success">✅ Homepage loads (online or from cache)</div>';
+                }
+            } catch (err) {
+                status.innerHTML = `<div class="status error">❌ Offline test failed: ${err.message}</div>`;
+            }
+        }
+
+        async function checkCaches() {
+            const status = document.getElementById('cache-status');
+            try {
+                const cacheNames = await caches.keys();
+                if (cacheNames.length > 0) {
+                    let html = '<div class="status success">✅ Found ' + cacheNames.length + ' cache(s):</div>';
+                    for (const name of cacheNames) {
+                        const cache = await caches.open(name);
+                        const keys = await cache.keys();
+                        html += `<div class="status"><strong>${name}</strong>: ${keys.length} items</div>`;
+                    }
+                    status.innerHTML = html;
+                } else {
+                    status.innerHTML = '<div class="status warning">⚠️ No caches found</div>';
+                }
+            } catch (err) {
+                status.innerHTML = `<div class="status error">❌ Error: ${err.message}</div>`;
+            }
+        }
+
+        async function clearCaches() {
+            const cacheNames = await caches.keys();
+            await Promise.all(cacheNames.map(name => caches.delete(name)));
+            document.getElementById('cache-status').innerHTML = '<div class="status success">✅ All caches cleared. Reload to rebuild.</div>';
+        }
+
+        // Auto-run checks on load
+        window.addEventListener('load', () => {
+            checkServiceWorker();
+            checkManifest();
+            checkInstallability();
+        });
+    </script>
+</body>
+
+</html>

@@ -3,10 +3,13 @@
 
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
-    window.location.hostname === '[::1]' ||
-    window.location.hostname.match(
-      /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
-    )
+  window.location.hostname === '[::1]' ||
+  // Match 127.x.x.x
+  window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/) ||
+  // Match private network IPs (192.168.x.x, 10.x.x.x, 172.16-31.x.x)
+  window.location.hostname.match(/^192\.168\./) ||
+  window.location.hostname.match(/^10\./) ||
+  window.location.hostname.match(/^172\.(1[6-9]|2[0-9]|3[0-1])\./)
 );
 
 export function register(config) {
@@ -24,7 +27,7 @@ export function register(config) {
         navigator.serviceWorker.ready.then(() => {
           console.log(
             'This web app is being served cache-first by a service ' +
-              'worker. To learn more, visit https://cra.link/PWA'
+            'worker. To learn more, visit https://cra.link/PWA'
           );
         });
       } else {
@@ -48,7 +51,7 @@ function registerValidSW(swUrl, config) {
             if (navigator.serviceWorker.controller) {
               console.log(
                 'New content is available and will be used when all ' +
-                  'tabs for this page are closed.'
+                'tabs for this page are closed.'
               );
               if (config && config.onUpdate) {
                 config.onUpdate(registration);
