@@ -119,18 +119,43 @@ const SmartFooter = () => {
   }, []);
 
   const handleInstall = async () => {
-    if (installLoading || !deferredPrompt) return;
+    if (installLoading) return;
+
+    // Check if it's iOS
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+    if (isIOS || isSafari) {
+      alert("To Install: Tap the 'Share' button (square with arrow up) and select 'Add to Home Screen'.");
+      return;
+    }
+
+    if (!deferredPrompt) {
+      alert("The app is ready to install! Please click your browser's menu (⋮ or ⇧) and select 'Install' or 'Add to Home Screen'.");
+      return;
+    }
+
     setInstallLoading(true);
     try {
       await deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
+      console.log('📦 Install outcome:', outcome);
       if (outcome === 'accepted') setIsInstalled(true);
-    } catch (e) { }
+    } catch (e) {
+      console.error('📦 Install error:', e);
+    }
     setDeferredPrompt(null);
     setInstallLoading(false);
   };
 
-  const showInstallButton = !isInstalled && !!deferredPrompt;
+  const [debugInfo, setDebugInfo] = useState('');
+
+  useEffect(() => {
+    console.log('📦 PWA State:', { isInstalled, hasPrompt: !!deferredPrompt });
+  }, [isInstalled, deferredPrompt]);
+
+  const showInstallButton = !isInstalled;
+  const isPromptReady = !!deferredPrompt;
 
   return (
     <footer className="smart-footer" role="contentinfo">
@@ -184,18 +209,22 @@ const SmartFooter = () => {
           </nav>
         </div>
 
-        {/* Col 3: Install (right) – only when beforeinstallprompt active */}
+        {/* Col 3: Install (right) */}
         <div className="smart-footer__col smart-footer__col--install">
           {showInstallButton && (
             <button
               type="button"
-              className="smart-footer__install-btn"
+              className={`smart-footer__install-btn ${isPromptReady ? 'smart-footer__install-btn--ready' : ''}`}
               onClick={handleInstall}
               disabled={installLoading}
               aria-label="Install Urban Harvest app"
             >
               <span className="smart-footer__install-icon" aria-hidden="true">
-                <img src="/images/icons/favicon.jpg" alt="" style={{ width: '20px', height: '20px', borderRadius: '4px' }} />
+                <img
+                  src="/images/icons/favicon.jpg"
+                  alt="App Icon"
+                  style={{ width: '20px', height: '20px', borderRadius: '4px', objectFit: 'cover' }}
+                />
               </span>
               <span>{installLoading ? 'Installing…' : 'Install App'}</span>
             </button>

@@ -277,6 +277,35 @@
   border-color: var(--primary-soft);
 }
 
+.smart-footer__install-btn--ready {
+  border-color: var(--success);
+  color: var(--success);
+  animation: smart-footer-pulse 2s infinite;
+}
+
+.smart-footer__install-icon img {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  transition: transform 0.3s ease;
+}
+
+.smart-footer__install-btn:hover .smart-footer__install-icon img {
+  transform: scale(1.1);
+}
+
+@keyframes smart-footer-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(135, 169, 107, 0.4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(135, 169, 107, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(135, 169, 107, 0);
+  }
+}
+
 /* ---- Tagline: smaller, high-end ---- */
 .smart-footer__tagline {
   margin: 0;
