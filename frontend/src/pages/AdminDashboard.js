@@ -35,7 +35,7 @@ const Skeleton = ({ className }) => (
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
-  const { admin } = useAuth();
+  const { admin, logoutAdmin } = useAuth();
   const token = getAdminToken();
   const [stats, setStats] = useState({ totalOrders: 0, totalRevenue: 0, activeWorkshops: 0, totalUsers: 0 });
   const [orders, setOrders] = useState([]);
@@ -71,7 +71,7 @@ const AdminDashboard = () => {
         setOrders(Array.isArray(ordersData) ? ordersData : []);
       } catch (err) {
         if (err.message && /token|denied|expired|invalid/i.test(err.message)) {
-          clearAdminToken();
+          logoutAdmin();
           navigate('/admin-login', { replace: true });
         }
         setError(err.message);
@@ -207,7 +207,7 @@ const AdminDashboard = () => {
   };
 
   const handleLogout = () => {
-    clearAdminToken();
+    logoutAdmin();
     navigate('/admin-login', { replace: true });
   };
 

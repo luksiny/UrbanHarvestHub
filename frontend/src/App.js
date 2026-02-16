@@ -12,8 +12,8 @@ import Login from './pages/Login';
 import './App.css';
 
 // Below-the-fold / non-LCP: lazy load to shrink main bundle and improve TBT/LCP
+import SmartFooter from './components/SmartFooter';
 const BottomNav = lazy(() => import('./components/BottomNav'));
-const SmartFooter = lazy(() => import('./components/SmartFooter'));
 const UpdateBanner = lazy(() => import('./components/UpdateBanner'));
 const SyncOrders = lazy(() => import('./components/SyncOrders').then((m) => ({ default: m.SyncOrders })));
 const ShoppingBag = lazy(() => import('./components/ShoppingBag'));
@@ -96,11 +96,7 @@ function AppContent({ theme, toggleTheme }) {
           <BottomNav />
         </Suspense>
       )}
-      {!isAdminArea && (
-        <Suspense fallback={null}>
-          <SmartFooter />
-        </Suspense>
-      )}
+      {!isAdminArea && <SmartFooter />}
       {!isAdminArea && (
         <Suspense fallback={null}>
           <UpdateBanner />

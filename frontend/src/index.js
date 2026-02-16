@@ -22,7 +22,7 @@ function registerSW() {
         try {
           new Notification('Urban Harvest Hub', {
             body: 'New events and products available! Refresh the app to see updates.',
-            icon: '/favicon.ico',
+            icon: '/images/icons/favicon.jpg',
             tag: 'app-update'
           });
         } catch (e) { /* ignore */ }

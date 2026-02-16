@@ -125,7 +125,7 @@ const SmartFooter = () => {
       await deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
       if (outcome === 'accepted') setIsInstalled(true);
-    } catch (e) {}
+    } catch (e) { }
     setDeferredPrompt(null);
     setInstallLoading(false);
   };
@@ -195,7 +195,7 @@ const SmartFooter = () => {
               aria-label="Install Urban Harvest app"
             >
               <span className="smart-footer__install-icon" aria-hidden="true">
-                <IconInstallApp />
+                <img src="/images/icons/favicon.jpg" alt="" style={{ width: '20px', height: '20px', borderRadius: '4px' }} />
               </span>
               <span>{installLoading ? 'Installing…' : 'Install App'}</span>
             </button>
