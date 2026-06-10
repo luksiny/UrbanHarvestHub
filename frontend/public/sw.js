@@ -1,28 +1,25 @@
-const CACHE_NAME = 'urban-harvest-hub-v19'; // Bumped version for PWA fix
+const CACHE_NAME = 'urban-harvest-hub-v5';
 const PRECACHE_URLS = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/images/icons/favicon.jpg'
-].filter(url => url);
+  '/favicon.ico',
+  '/logo192.png',
+  '/logo512.png'
+];
 
-// Install: precache app shell
+// Install: precache app shell so start_url returns 200 when offline (Lighthouse PWA)
 self.addEventListener('install', (event) => {
-  console.log('🛡️ SW: Installing v19...');
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      // Use addAll but catch errors so one missing file doesn't break the entire install
-      return cache.addAll(PRECACHE_URLS).catch((err) => {
-        console.warn("🛡️ SW: Precache warning (some files might be missing in dev):", err);
-      });
-    }).then(() => {
-      console.log('🛡️ SW: Install complete, skipping waiting...');
-      return self.skipWaiting();
+      return cache.addAll(PRECACHE_URLS).catch(() => { });
     })
   );
+  // Do not skipWaiting here – wait for user to click "Refresh" so we can show update notification
 });
 
-// Message handler for UI updates or manual caching
+// When the page asks to activate the new worker (user clicked "Refresh")
+// or to cache specific URLs for offline (e.g. event detail page)
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
@@ -47,14 +44,13 @@ self.addEventListener('message', (event) => {
   }
 });
 
-// Activate: This is the part that actually DELETES the old caches
+// Activate: clean old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
-            console.log("🛡️ SW: Deleting old cache:", cacheName);
             return caches.delete(cacheName);
           }
         })
@@ -64,40 +60,30 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch: Stale-while-revalidate strategy for the app shell and assets
+// Fetch: Stale-while-revalidate for same-origin GET; serve 200 for start_url when offline (PWA)
 self.addEventListener('fetch', (event) => {
-  // Only handle GET requests
   if (event.request.method !== 'GET') return;
-
-  // Skip browser extensions and non-http schemes
-  if (!event.request.url.startsWith('http')) return;
-
   const url = new URL(event.request.url);
-
-  // Skip API calls for caching (we handle those via application logic or separate cache)
-  if (url.pathname.startsWith('/api')) return;
+  if (url.origin !== self.location.origin) return;
 
   event.respondWith(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.match(event.request).then((cachedResponse) => {
         const fetchPromise = fetch(event.request)
           .then((networkResponse) => {
-            // Check for valid response before caching
-            if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+            if (networkResponse && networkResponse.status === 200) {
               cache.put(event.request, networkResponse.clone());
             }
             return networkResponse;
           })
-          .catch((err) => {
-            console.log("🛡️ SW: Fetch failed (offline?):", err);
-            // If it's a navigation request and we're offline, return the root
+          .catch(() => {
+            // Navigation (start_url): serve precached / or /index.html for 200 offline
             if (event.request.mode === 'navigate') {
               return cache.match('/').then((r) => r || cache.match('/index.html'));
             }
-            return cachedResponse;
+            return cachedResponse || undefined;
           });
 
-        // Return cached response immediately if available, otherwise wait for network
         return cachedResponse || fetchPromise;
       });
     })
