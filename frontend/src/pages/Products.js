@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { productsAPI } from '../services/api';
+import { staticProducts } from '../data/staticData';
 import { getProductImage, resolveProductImagePath } from '../utils/productImages';
 import { SkeletonGrid } from '../components/Skeleton';
 import { useCart } from '../context/CartContext';
@@ -90,8 +91,16 @@ const Products = () => {
         setProducts(unique);
         setError(null);
       } catch (err) {
-        setError(err.message);
-        console.error('Error fetching products:', err);
+        console.warn('Backend unavailable, using static product data:', err.message);
+        // Apply filters to static data as fallback
+        let fallback = staticProducts;
+        if (params.search) fallback = fallback.filter(p => p.name.toLowerCase().includes(params.search.toLowerCase()) || (p.description || '').toLowerCase().includes(params.search.toLowerCase()));
+        if (params.category) fallback = fallback.filter(p => p.category === params.category);
+        if (params.minPrice) fallback = fallback.filter(p => p.price >= Number(params.minPrice));
+        if (params.maxPrice) fallback = fallback.filter(p => p.price <= Number(params.maxPrice));
+        if (params.organic != null) fallback = fallback.filter(p => p.organic === params.organic);
+        setProducts(fallback);
+        setError(null);
       } finally {
         setLoading(false);
         initialLoadDone.current = true;

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { eventsAPI } from '../services/api';
+import { staticEvents } from '../data/staticData';
 import { SkeletonGrid } from '../components/Skeleton';
 import {
   cacheEventForOffline,
@@ -110,8 +111,12 @@ const Events = () => {
         setEvents(Array.isArray(data) ? data : []);
         setError(null);
       } catch (err) {
-        setError(err.message);
-        console.error('Error fetching events:', err);
+        console.warn('Backend unavailable, using static event data:', err.message);
+        let fallback = staticEvents;
+        if (searchTerm) fallback = fallback.filter(ev => ev.title.toLowerCase().includes(searchTerm.toLowerCase()) || (ev.description || '').toLowerCase().includes(searchTerm.toLowerCase()));
+        if (categoryFilter) fallback = fallback.filter(ev => ev.category === categoryFilter);
+        setEvents(fallback);
+        setError(null);
       } finally {
         setLoading(false);
       }

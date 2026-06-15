@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { workshopsAPI } from '../services/api';
+import { staticWorkshops } from '../data/staticData';
 import { SkeletonGrid } from '../components/Skeleton';
 import './Workshops.css';
 
@@ -36,8 +37,13 @@ const Workshops = () => {
         setWorkshops(Array.isArray(data) ? data : []);
         setError(null);
       } catch (err) {
-        setError(err.message);
-        console.error('Error fetching workshops:', err);
+        console.warn('Backend unavailable, using static workshop data:', err.message);
+        // Filter static data to match search/category
+        let fallback = staticWorkshops;
+        if (searchTerm) fallback = fallback.filter(w => w.title.toLowerCase().includes(searchTerm.toLowerCase()) || w.description.toLowerCase().includes(searchTerm.toLowerCase()));
+        if (categoryFilter) fallback = fallback.filter(w => w.category === categoryFilter);
+        setWorkshops(fallback);
+        setError(null);
       } finally {
         setLoading(false);
       }

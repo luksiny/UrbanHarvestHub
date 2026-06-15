@@ -39,14 +39,13 @@ if (fs.existsSync(caPath)) {
   console.log('🔒 Using SSL Certificate from ' + caPath);
   options.dialectOptions.ssl = {
     ca: fs.readFileSync(caPath),
-    rejectUnauthorized: true,
+    rejectUnauthorized: false,
   };
 } else if (process.env.NODE_ENV === 'production' || (DB_HOST !== 'localhost' && DB_HOST !== '127.0.0.1')) {
   // Fallback for production or remote dev (e.g. Aiven)
   console.log('⚠️ Remote database detected. Using basic SSL.');
   options.dialectOptions.ssl = {
-    require: true,
-    rejectUnauthorized: false, // Allow self-signed certs for dev ease
+    rejectUnauthorized: false,
   };
 }
 

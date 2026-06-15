@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { workshopsAPI, productsAPI, eventsAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { getProductImage, resolveProductImagePath } from '../utils/productImages';
+import { staticWorkshops, staticProducts, staticEvents } from '../data/staticData';
 import './Home.css';
 
 // Helper function to get workshop image path
@@ -56,12 +57,12 @@ const Home = () => {
         setEvents(Array.isArray(eventsRaw) ? eventsRaw : []);
         setError(null);
       } catch (err) {
-        setError(err.message || 'Failed to load data. Make sure the backend server is running.');
-        console.error('Error fetching data:', err);
-        // Set empty arrays on error so UI doesn't break
-        setWorkshops([]);
-        setProducts([]);
-        setEvents([]);
+        console.warn('Backend unavailable, using static data:', err.message);
+        // Fallback to static data so the hosted site always has content
+        setWorkshops(staticWorkshops.slice(0, 3));
+        setProducts(staticProducts.slice(0, 6));
+        setEvents(staticEvents.slice(0, 3));
+        setError(null);
       } finally {
         setLoading(false);
       }
