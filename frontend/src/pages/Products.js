@@ -75,9 +75,9 @@ const Products = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
+      const params = applyFilters();
       try {
         if (!initialLoadDone.current) setLoading(true);
-        const params = applyFilters();
         const response = await productsAPI.getAll(params);
         const rawList = response?.data ?? response ?? [];
         const list = Array.isArray(rawList) ? rawList : [];
