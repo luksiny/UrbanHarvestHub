@@ -6,9 +6,8 @@
 /* Hero: Full-width background image with overlay */
 .hero {
   position: relative;
-  background-image: url('../assets/images/hero-img.jpg');
   background-size: cover;
-  background-position: center;
+  background-position: center bottom;
   background-repeat: no-repeat;
   padding: 120px 0 100px;
   margin-bottom: 0;
@@ -18,20 +17,7 @@
   justify-content: center;
 }
 
-/* Dark overlay for better text readability */
-.hero::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg,
-      rgba(34, 139, 34, 0.75) 0%,
-      rgba(46, 125, 50, 0.65) 50%,
-      rgba(27, 94, 32, 0.8) 100%);
-  z-index: 1;
-}
+
 
 .hero .container {
   position: relative;
@@ -47,7 +33,7 @@
   color: #ffffff;
   margin-bottom: 20px;
   letter-spacing: -0.02em;
-  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+  text-shadow: 0px 4px 8px rgba(0, 0, 0, 0.8), 0px 0px 40px rgba(0, 0, 0, 0.5);
   line-height: 1.2;
 }
 
@@ -56,7 +42,7 @@
   color: rgba(255, 255, 255, 0.95);
   margin-bottom: 32px;
   line-height: 1.6;
-  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+  text-shadow: 0px 2px 6px rgba(0, 0, 0, 0.8), 0px 0px 20px rgba(0, 0, 0, 0.5);
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;

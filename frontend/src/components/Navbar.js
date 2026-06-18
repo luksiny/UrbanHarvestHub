@@ -29,7 +29,7 @@ const Navbar = ({ theme, toggleTheme, onOpenCart }) => {
             className={location.pathname === '/' ? 'active' : ''}
             aria-current={location.pathname === '/' ? 'page' : undefined}
           >
-            <FaHome aria-hidden="true" />
+            <FaHome aria-hidden="true" style={{ marginRight: '6px' }} />
             <span className="nav-text">Home</span>
           </Link>
           <Link

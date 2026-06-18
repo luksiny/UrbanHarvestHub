@@ -123,7 +123,7 @@ const Home = () => {
   // Always render shell so LCP (hero) paints immediately; show loading only in data sections
   return (
     <div className="home">
-      <section className="hero">
+      <section className="hero" style={{ backgroundImage: "url('/images/hero/hero_hd_daisies.png')" }}>
         <div className="container">
           <div className="hero-content">
             <h1>{user ? `Hello, ${user.name.split(' ')[0]}!` : 'Find your next organic harvest'}</h1>
